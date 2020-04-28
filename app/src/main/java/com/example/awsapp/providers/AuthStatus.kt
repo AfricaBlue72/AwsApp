@@ -1,6 +1,7 @@
 package com.example.awsapp.providers
 
 enum class AuthStatus(value: Int){
+    ERROR(-2),
     UNKNOWN(-1),
     GUEST(0),
     SIGNED_IN(1),
@@ -12,5 +13,6 @@ enum class AuthStatus(value: Int){
     SIGNED_OUT(7),
     SIGNED_OUT_FEDERATED_TOKENS_INVALID(8),
     SIGNED_OUT_USER_POOLS_TOKENS_INVALID(9),
-    CONFIRMING_CODE(10)
+    CONFIRMING_CODE(10),
+    NEW_PASSWORD_REQUIRED(11)
 }

@@ -50,7 +50,7 @@ class SignoutFragment : Fragment() {
 
         root.findViewById<Button>(R.id.buttonSignout).apply{
             setOnClickListener {
-                viewModel.simpleSignout(false, false)
+                viewModel.signout(false, false)
             }
         }
 

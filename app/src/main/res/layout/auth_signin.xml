@@ -44,7 +44,7 @@
         android:text="@string/auth_signin"
         app:layout_constraintEnd_toEndOf="@+id/editUsername"
         app:layout_constraintStart_toStartOf="@+id/editUsername"
-        app:layout_constraintTop_toBottomOf="@+id/editPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonForgotPassword" />
 
     <Button
         android:id="@+id/buttonSignup"
@@ -63,12 +63,14 @@
         style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:text="@string/auth_forgot_password"
         android:textColor="@color/colorLinkButton"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonSignup" />
+        app:layout_constraintTop_toBottomOf="@+id/editPassword" />
 
     <ProgressBar
         android:id="@+id/progressBar"

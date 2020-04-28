@@ -27,68 +27,25 @@ class SigninViewModel(application: Application) : BaseAuthViewModel(application)
 
     private val mLogTag = APP_TAG + this::class.java.simpleName
 
-    private val authProvider: AwsAuthProvider
-    get() {
-        val authProvider = ProviderInjector.getAwsAuthProvider()
-        return authProvider
-    }
-
     fun signin(userName: String, password: String){
         isBusy.value = true
 
         viewModelScope.launch {
             _singin(userName, password)
+            isBusy.postValue(false)
         }
     }
 
     private suspend fun _singin(userName: String, password: String) = withContext(Dispatchers.IO){
         val result = authProvider.signin(userName, password)
-        if(result == null || result.signInState == SignInState.UNKNOWN){
-            authStatus.postValue(AuthStatus.SIGNED_IN_NOK)
+
+        authStatus.postValue(result.status)
+
+        if(result.status == AuthStatus.UNKNOWN || result.status == AuthStatus.ERROR){
             feedback.postValue( context.getString(R.string.auth_message_signin_nok) )
         }
         else{
-            authStatus.postValue(AuthStatus.SIGNED_IN)
             feedback.postValue( context.getString(R.string.auth_message_signin_ok) )
         }
-
-        isBusy.postValue(false)
-
-//        isBusy.value = true
-//        val result = authProvider.signin(userName, password)
-//
-//        authStatus.value = result?.status ?: AuthStatus.UNKNOWN
-//        if(authStatus.value == AuthStatus.SIGNED_IN){
-//            feedback.value = context.getString(R.string.auth_message_signin_ok)
-//        }
-//        else {
-//            feedback.value = context.getString(R.string.auth_message_signin_nok)
-//        }
-//        isBusy.value = false
     }
-
-//    fun signin(userName: String, password: String){
-//        isBusy.value = true
-//        AWSMobileClient.getInstance().signIn(
-//            userName,
-//            password,
-//            null,
-//            object : Callback<SignInResult> {
-//                override fun onResult(result: SignInResult?) {
-//                    isBusy.postValue(false)
-//                    authStatus.postValue(AuthStatus.SIGNED_IN)
-//                    feedback.postValue( context.getString(R.string.auth_message_signin_ok) )
-//                    Log.i(mLogTag, "Signin successful.")
-//                }
-//
-//                override fun onError(e: Exception?) {
-//                    isBusy.postValue(false)
-//                    authStatus.postValue(AuthStatus.SIGNED_IN_NOK)
-//                    feedback.postValue(context.getString(R.string.auth_message_signin_nok))
-//
-//                    Log.e(mLogTag, "Signin error.", e)
-//                }
-//            }
-//        )
-//    }
 }

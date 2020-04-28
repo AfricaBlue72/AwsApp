@@ -4,6 +4,8 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.example.awsapp.providers.AuthStatus
+import com.example.awsapp.providers.AwsAuthProvider
+import com.example.awsapp.providers.ProviderInjector
 import com.example.awsapp.util.APP_TAG
 
 abstract class BaseAuthViewModel (application: Application) : AndroidViewModel(application){
@@ -18,4 +20,12 @@ abstract class BaseAuthViewModel (application: Application) : AndroidViewModel(a
     }
 
     var feedback = MutableLiveData<String?>()
+
+    protected val authProvider: AwsAuthProvider
+        get() {
+            TODO("Use injection to insert correct provider")
+            TODO("Set type to BaseAuthProvider")
+            val authProvider = ProviderInjector.getAwsAuthProvider()
+            return authProvider
+        }
 }

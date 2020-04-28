@@ -1,8 +1,8 @@
 package com.example.awsapp.providers
 
 class AuthResult constructor(
-    val status: AuthStatus,
-    val message: String,
-    val providerResult: Any?) {
+    var status: AuthStatus = AuthStatus.UNKNOWN,
+    var message: String? = null,
+    var providerResult: Any? = null) {
 
 }
