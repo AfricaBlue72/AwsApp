@@ -2,7 +2,7 @@ package com.example.awsapp.data
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.example.awsapp.util.AuthStatus
+import com.example.awsapp.providers.AuthStatus
 
 @Dao
 interface CognitoUserDao {

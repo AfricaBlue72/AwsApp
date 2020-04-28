@@ -2,6 +2,8 @@ package com.example.awsapp.ui.auth
 
 import android.app.Dialog
 import android.content.DialogInterface
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
@@ -17,13 +19,15 @@ class MFADialog(listener: VerifyCodeDialogListener) : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        super.onCreateDialog(savedInstanceState)
+        val dialog = super.onCreateDialog(savedInstanceState)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         return activity?.let {
             // Build the dialog and set up the button click handlers
             val builder = AlertDialog.Builder(it)
             val inflater = requireActivity().layoutInflater;
             val view = inflater.inflate(R.layout.auth_mfa_dialog, null)
+//            view.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
             builder.setView(view)
                 .setPositiveButton("Confirm",

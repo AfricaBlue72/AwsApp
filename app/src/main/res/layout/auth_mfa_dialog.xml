@@ -5,8 +5,7 @@
     android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/side_nav_bar"
-    tools:context=".fragment_insert_code">
+    android:background="@drawable/dialog_bg">
 
     <TextView
         android:id="@+id/textView2"

@@ -12,9 +12,9 @@ import com.amazonaws.mobile.client.Callback
 import com.amazonaws.mobile.client.results.SignUpResult
 import com.example.awsapp.R
 import com.example.awsapp.data.AppRepository
-import com.example.awsapp.util.AuthStatus
 import com.example.awsapp.data.CognitoUser
 import com.example.awsapp.data.InjectorUtils
+import com.example.awsapp.providers.AuthStatus
 import com.example.awsapp.util.APP_TAG
 import com.example.awsapp.util.StringUtils
 import kotlinx.android.synthetic.main.auth_signup.*

@@ -13,8 +13,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.awsapp.R
+import com.example.awsapp.providers.AuthStatus
 import com.example.awsapp.util.APP_TAG
-import com.example.awsapp.util.AuthStatus
 import kotlinx.android.synthetic.main.auth_signin.*
 
 class SigninFragment : Fragment(), MFADialog.VerifyCodeDialogListener {
@@ -31,10 +31,10 @@ class SigninFragment : Fragment(), MFADialog.VerifyCodeDialogListener {
 
         viewModel.authStatus.observe(viewLifecycleOwner, Observer{
             if(it != null && it == AuthStatus.SIGNED_IN){
-//                val navController = findNavController()
-//                navController.popBackStack()
-                val newFragment = MFADialog(this)
-                newFragment.show(childFragmentManager, null)
+                val navController = findNavController()
+                navController.popBackStack()
+//                val newFragment = MFADialog(this)
+//                newFragment.show(childFragmentManager, null)
             }
         })
 
@@ -66,9 +66,7 @@ class SigninFragment : Fragment(), MFADialog.VerifyCodeDialogListener {
         }
 
         root.findViewById<Button>(R.id.buttonSignup).apply {
-            setOnClickListener{
-                viewModel.navigateToSignup(findNavController())
-            }
+            findNavController().navigate(R.id.action_signinFragment_to_signupFragment)
         }
 
         return root

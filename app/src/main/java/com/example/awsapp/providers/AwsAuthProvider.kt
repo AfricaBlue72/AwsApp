@@ -8,7 +8,6 @@ import com.amazonaws.mobile.client.Callback
 import com.amazonaws.mobile.client.results.SignInResult
 import com.example.awsapp.R
 import com.example.awsapp.util.APP_TAG
-import com.example.awsapp.util.AuthStatus
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import java.lang.Exception

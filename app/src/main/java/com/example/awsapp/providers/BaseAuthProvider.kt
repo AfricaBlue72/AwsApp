@@ -1,15 +1,12 @@
 package com.example.awsapp.providers
 
 import androidx.lifecycle.LiveData
-import com.example.awsapp.util.AuthStatus
 import java.util.*
 
 //typealias IdentityResponse = (Map<String, String>?) -> Unit
 //typealias IdentityHandler = (IdentityRequest, Map<String,String>?, IdentityResponse) -> Unit
 
-class AuthResult constructor( val status: AuthStatus, val message: String, val providerResult: Any?) {
 
-}
 
 interface  BaseAuthProvider {
       fun signin(userName: String, password: String): Any?

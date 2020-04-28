@@ -5,8 +5,8 @@ import com.amazonaws.mobile.client.AWSMobileClient
 import com.amazonaws.mobile.client.Callback
 import com.amazonaws.mobile.client.SignOutOptions
 import com.example.awsapp.R
+import com.example.awsapp.providers.AuthStatus
 import com.example.awsapp.util.APP_TAG
-import com.example.awsapp.util.AuthStatus
 import java.lang.Exception
 
 class SignoutViewModel (application: Application) : BaseAuthViewModel(application){

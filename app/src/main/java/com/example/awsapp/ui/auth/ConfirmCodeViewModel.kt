@@ -9,8 +9,8 @@ import com.amazonaws.mobile.client.results.SignUpResult
 import com.example.awsapp.R
 import com.example.awsapp.data.AppRepository
 import com.example.awsapp.data.InjectorUtils
+import com.example.awsapp.providers.AuthStatus
 import com.example.awsapp.util.APP_TAG
-import com.example.awsapp.util.AuthStatus
 import java.lang.Exception
 
 class ConfirmCodeViewModel (application: Application) : BaseAuthViewModel(application){

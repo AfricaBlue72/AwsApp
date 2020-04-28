@@ -3,8 +3,8 @@ package com.example.awsapp.ui.auth
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import com.example.awsapp.providers.AuthStatus
 import com.example.awsapp.util.APP_TAG
-import com.example.awsapp.util.AuthStatus
 
 abstract class BaseAuthViewModel (application: Application) : AndroidViewModel(application){
     private val mLogTag = APP_TAG + this::class.java.simpleName

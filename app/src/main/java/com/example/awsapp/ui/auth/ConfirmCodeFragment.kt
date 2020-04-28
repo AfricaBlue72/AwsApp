@@ -22,8 +22,8 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.awsapp.R
+import com.example.awsapp.providers.AuthStatus
 import com.example.awsapp.util.APP_TAG
-import com.example.awsapp.util.AuthStatus
 import kotlinx.android.synthetic.main.auth_confirm_code.*
 import kotlinx.android.synthetic.main.auth_signup.*
 

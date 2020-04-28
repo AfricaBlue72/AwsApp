@@ -15,9 +15,9 @@ import com.example.awsapp.util.APP_TAG
 import java.lang.Exception
 import com.example.awsapp.R
 import com.example.awsapp.providers.AuthResult
+import com.example.awsapp.providers.AuthStatus
 import com.example.awsapp.providers.AwsAuthProvider
 import com.example.awsapp.providers.ProviderInjector
-import com.example.awsapp.util.AuthStatus
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -40,7 +40,6 @@ class SigninViewModel(application: Application) : BaseAuthViewModel(application)
             _singin(userName, password)
         }
     }
-
 
     private suspend fun _singin(userName: String, password: String) = withContext(Dispatchers.IO){
         val result = authProvider.signin(userName, password)
@@ -92,9 +91,4 @@ class SigninViewModel(application: Application) : BaseAuthViewModel(application)
 //            }
 //        )
 //    }
-
-    fun navigateToSignup(navController: NavController)
-    {
-        navController.navigate(R.id.action_signinFragment_to_signupFragment)
-    }
 }

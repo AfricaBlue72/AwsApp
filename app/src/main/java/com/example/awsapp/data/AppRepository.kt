@@ -1,6 +1,7 @@
 package com.example.awsapp.data
 
-import com.example.awsapp.util.AuthStatus
+import com.example.awsapp.providers.AuthStatus
+
 
 class AppRepository private constructor(private val cognitoUserDao: CognitoUserDao) {
 
