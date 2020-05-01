@@ -68,7 +68,7 @@ class SignupViewModel(application: Application) : BaseAuthViewModel(application)
             feedback.postValue( context.getString(R.string.auth_message_signup_nok) )
         }
         else{
-            feedback.postValue( context.getString(R.string.auth_message_signin_ok) )
+            feedback.postValue( context.getString(R.string.auth_message_signup_ok) )
         }
     }
 //    fun signup(
@@ -124,10 +124,10 @@ class SignupViewModel(application: Application) : BaseAuthViewModel(application)
 //    }
 
     fun navigateToConfirmCode(navController: NavController, userName: String){
-        TODO ("Remove navigating in ViewModel")
         authStatus.value = AuthStatus.CONFIRMING_CODE
         val action = ConfirmCodeFragmentDirections.actionGlobalConfirmCodeFragment(
             userName , 1)
         navController.navigate(action)
+        //TODO ("Remove navigating in ViewModel")
     }
 }

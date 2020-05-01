@@ -33,7 +33,6 @@ class SigninFragment : Fragment(), MFADialog.VerifyCodeDialogListener {
             if(it != null && it == AuthStatus.SIGNED_IN){
                 val navController = findNavController()
                 navController.popBackStack()
-                TODO("Create flow for New Password and MFA")
 //                val newFragment = MFADialog(this)
 //                newFragment.show(childFragmentManager, null)
             }
@@ -67,7 +66,9 @@ class SigninFragment : Fragment(), MFADialog.VerifyCodeDialogListener {
         }
 
         root.findViewById<Button>(R.id.buttonSignup).apply {
-            findNavController().navigate(R.id.action_signinFragment_to_signupFragment)
+            setOnClickListener {
+                findNavController().navigate(R.id.action_signinFragment_to_signupFragment)
+            }
         }
 
         return root

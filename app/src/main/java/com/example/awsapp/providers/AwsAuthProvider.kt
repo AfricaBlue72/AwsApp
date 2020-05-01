@@ -92,7 +92,7 @@ class AwsAuthProvider() : BaseAuthProvider {
             if(signUpResult.confirmationState == true){
                 result.status = AuthStatus.SIGNED_UP
             }else{
-                TODO("Take UserCodeDeliveryDetails into account")
+//                TODO("Take UserCodeDeliveryDetails into account")
                 result.status = AuthStatus.SIGNED_UP_WAIT_FOR_CODE
             }
             result.providerResult = signUpResult
@@ -107,8 +107,27 @@ class AwsAuthProvider() : BaseAuthProvider {
         }
     }
 
-    fun confirmSignup (userName: String, code: String){
+    fun confirmSignup (userName: String, code: String): AuthResult{
+        val result: AuthResult = AuthResult()
 
+        try {
+            val signUpResult = AWSMobileClient.getInstance().confirmSignUp(userName, code)
+            if(signUpResult.confirmationState == true){
+                result.status = AuthStatus.SIGNED_UP
+            }else{
+//                TODO("Take UserCodeDeliveryDetails into account")
+                result.status = AuthStatus.SIGNED_UP_WAIT_FOR_CODE
+            }
+            result.providerResult = signUpResult
+        }
+        catch(e: Exception){
+            Log.w(mLogTag, "Error: " + e.message)
+            result.status = AuthStatus.ERROR
+            result.message = e.message
+        }
+        finally {
+            return result
+        }
     }
 
     companion object {

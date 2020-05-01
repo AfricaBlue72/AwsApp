@@ -23,9 +23,10 @@ abstract class BaseAuthViewModel (application: Application) : AndroidViewModel(a
 
     protected val authProvider: AwsAuthProvider
         get() {
-            TODO("Use injection to insert correct provider")
-            TODO("Set type to BaseAuthProvider")
-            val authProvider = ProviderInjector.getAwsAuthProvider()
+          val authProvider = ProviderInjector.getAwsAuthProvider()
             return authProvider
+            //            TODO("Use injection to insert correct provider")
+            //            TODO("Set type to BaseAuthProvider")
+
         }
 }

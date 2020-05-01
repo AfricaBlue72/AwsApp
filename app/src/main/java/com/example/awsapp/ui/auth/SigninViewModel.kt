@@ -37,6 +37,7 @@ class SigninViewModel(application: Application) : BaseAuthViewModel(application)
     }
 
     private suspend fun _singin(userName: String, password: String) = withContext(Dispatchers.IO){
+
         val result = authProvider.signin(userName, password)
 
         authStatus.postValue(result.status)

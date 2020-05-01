@@ -2,14 +2,18 @@ package com.example.awsapp
 
 
 import android.os.Bundle
+import android.view.Gravity
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.CompoundButton
 import android.widget.TextView
+import android.widget.Toast
 import android.widget.ToggleButton
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.drawerlayout.widget.DrawerLayout.SimpleDrawerListener
 import androidx.lifecycle.Observer
@@ -21,6 +25,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.amazonaws.mobile.client.AWSMobileClient
 import com.amazonaws.mobile.client.UserState
 import com.google.android.material.navigation.NavigationView
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -108,6 +113,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
@@ -118,5 +124,9 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
+
+
+
+
 }
 

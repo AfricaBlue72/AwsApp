@@ -27,14 +27,16 @@ class SignoutViewModel (application: Application) : BaseAuthViewModel(applicatio
     }
 
     private suspend fun _signout(signOutGlobally: Boolean, invalidateTokens: Boolean) = withContext(Dispatchers.IO){
+
         val result = authProvider.signout(signOutGlobally, invalidateTokens)
+
+        authStatus.postValue(result.status)
+
         if(result.status == AuthStatus.UNKNOWN || result.status == AuthStatus.ERROR){
-            authStatus.postValue(result.status)
-            feedback.postValue( context.getString(R.string.auth_message_signin_nok) )
+            feedback.postValue( context.getString(R.string.auth_message_signout_nok) )
         }
         else{
-            authStatus.postValue(AuthStatus.SIGNED_OUT)
-            feedback.postValue( context.getString(R.string.auth_message_signin_ok) )
+            feedback.postValue( context.getString(R.string.auth_message_signout_ok) )
         }
     }
 }
