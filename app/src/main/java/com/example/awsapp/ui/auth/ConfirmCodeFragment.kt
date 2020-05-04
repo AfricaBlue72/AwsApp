@@ -22,15 +22,19 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.awsapp.R
+import com.example.awsapp.lifecycle.Application
 import com.example.awsapp.providers.AuthStatus
 import com.example.awsapp.util.APP_TAG
+import com.example.awsapp.util.InjectorUtils
 import kotlinx.android.synthetic.main.auth_confirm_code.*
 import kotlinx.android.synthetic.main.auth_signup.*
 
 class ConfirmCodeFragment: Fragment() {
     // Use this instance of the interface to deliver action events
     val mLogTag = APP_TAG + this::class.java.simpleName
-    private val viewModel: ConfirmCodeViewModel by viewModels()
+    private val viewModel: ConfirmCodeViewModel by viewModels{
+        InjectorUtils.provideConfirmCodeViewModelFactory(requireContext())
+    }
     private val args: ConfirmCodeFragmentArgs by navArgs()
 
     override fun onCreateView(

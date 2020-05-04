@@ -10,12 +10,16 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.awsapp.R
+import com.example.awsapp.lifecycle.Application
 import com.example.awsapp.providers.AuthStatus
 import com.example.awsapp.util.APP_TAG
+import com.example.awsapp.util.InjectorUtils
 
 class SignoutFragment : Fragment() {
     val mLogTag = APP_TAG + this::class.java.simpleName
-    private val viewModel: SignoutViewModel by viewModels()
+    private val viewModel: SignoutViewModel by viewModels{
+        InjectorUtils.provideSignoutViewModelFactory(requireContext())
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

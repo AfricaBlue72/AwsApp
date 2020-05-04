@@ -1,5 +1,6 @@
 package com.example.awsapp.ui.auth
 
+import android.app.Application
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -15,11 +16,14 @@ import androidx.navigation.fragment.findNavController
 import com.example.awsapp.R
 import com.example.awsapp.providers.AuthStatus
 import com.example.awsapp.util.APP_TAG
+import com.example.awsapp.util.InjectorUtils
 import kotlinx.android.synthetic.main.auth_signin.*
 
 class SigninFragment : Fragment(), MFADialog.VerifyCodeDialogListener {
     val mLogTag = APP_TAG + this::class.java.simpleName
-    private val viewModel: SigninViewModel by viewModels()
+    private val viewModel: SigninViewModel by viewModels{
+        InjectorUtils.provideSigninViewModelFactory(requireContext())
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,6 +32,7 @@ class SigninFragment : Fragment(), MFADialog.VerifyCodeDialogListener {
     ): View? {
         val root = inflater.inflate(R.layout.auth_signin, container, false)
 
+        requireContext()
 
         viewModel.authStatus.observe(viewLifecycleOwner, Observer{
             if(it != null && it == AuthStatus.SIGNED_IN){

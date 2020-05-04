@@ -1,19 +1,18 @@
 package com.example.awsapp.ui.auth
 
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.viewModelScope
-import com.amazonaws.mobile.client.AWSMobileClient
-import com.amazonaws.mobile.client.Callback
-import com.amazonaws.mobile.client.SignOutOptions
 import com.example.awsapp.R
 import com.example.awsapp.providers.AuthStatus
+import com.example.awsapp.providers.BaseAuthProvider
 import com.example.awsapp.util.APP_TAG
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.lang.Exception
 
-class SignoutViewModel (application: Application) : BaseAuthViewModel(application){
+class SignoutViewModel (context: Context, authProvider: BaseAuthProvider)
+    : BaseAuthViewModel(context,authProvider){
     private val mLogTag = APP_TAG + this::class.java.simpleName
 
 

@@ -1,22 +1,18 @@
 package com.example.awsapp.providers
 
 import androidx.lifecycle.LiveData
-import java.util.*
-
-//typealias IdentityResponse = (Map<String, String>?) -> Unit
-//typealias IdentityHandler = (IdentityRequest, Map<String,String>?, IdentityResponse) -> Unit
-
-
+import androidx.lifecycle.MutableLiveData
 
 interface  BaseAuthProvider {
-      fun signin(userName: String, password: String): Any?
-//
-//    public fun signout(ignOutGlobally: Boolean, invalidateTokens: Boolean): Unit
-//
-//    public fun signup(userName: String,
-//                      email: String,
-//                      userAttributes: MutableMap<String, String>): Unit
-//
-//    fun confirmSignup (userName: String, code: String): Unit
+    val userName: MutableLiveData<String>
+    val currentUserState: MutableLiveData<AuthStatus>
 
+    fun signup(userName: String,
+             password: String,
+             userAttributes: MutableMap<String, String>): AuthResult
+
+    fun confirmSignup (userName: String, code: String): AuthResult
+    fun signin(userName: String, password: String): AuthResult
+
+    fun signout(signOutGlobally: Boolean, invalidateTokens: Boolean): AuthResult
 }

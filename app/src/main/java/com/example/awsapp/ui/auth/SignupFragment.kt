@@ -17,15 +17,19 @@ import com.amazonaws.mobile.client.AWSMobileClient
 import com.amazonaws.mobile.client.Callback
 import com.amazonaws.mobile.client.results.SignUpResult
 import com.example.awsapp.R
+import com.example.awsapp.lifecycle.Application
 import com.example.awsapp.providers.AuthStatus
 import com.example.awsapp.util.APP_TAG
+import com.example.awsapp.util.InjectorUtils
 import kotlinx.android.synthetic.main.auth_signup.*
 
 
 class SignupFragment : Fragment() {
 
     val mLogTag = APP_TAG + this::class.java.simpleName
-    val viewModel: SignupViewModel by viewModels()
+    val viewModel: SignupViewModel by viewModels{
+        InjectorUtils.provideSignupViewModelFactory(requireContext())
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

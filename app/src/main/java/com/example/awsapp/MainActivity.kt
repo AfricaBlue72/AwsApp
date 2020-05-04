@@ -2,18 +2,14 @@ package com.example.awsapp
 
 
 import android.os.Bundle
-import android.view.Gravity
 import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.widget.CompoundButton
 import android.widget.TextView
-import android.widget.Toast
 import android.widget.ToggleButton
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.drawerlayout.widget.DrawerLayout.SimpleDrawerListener
 import androidx.lifecycle.Observer
@@ -22,15 +18,19 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.amazonaws.mobile.client.AWSMobileClient
 import com.amazonaws.mobile.client.UserState
+import com.example.awsapp.providers.AuthStatus
+import com.example.awsapp.util.InjectorUtils
 import com.google.android.material.navigation.NavigationView
-import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
+    private val viewModel: MainActivityViewModel by viewModels{
+        InjectorUtils.provideMainActivityViewModelFactory()
+    }
+    private var userState = AuthStatus.UNKNOWN
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +55,16 @@ class MainActivity : AppCompatActivity() {
 
         setNavMenu(navView)
         setDrawerListener(drawerLayout, navView)
+
+        viewModel.userName.observe(this, Observer{
+            val header = navView.getHeaderView(0)
+            val headerText = header.findViewById<TextView>(R.id.textViewUser)
+            headerText.text = it
+        })
+
+        viewModel.currentUserState.observe(this, Observer {
+            userState = it
+        })
     }
 
     private fun setDrawerListener(
@@ -62,12 +72,12 @@ class MainActivity : AppCompatActivity() {
         navView: NavigationView
     ) {
         drawerLayout.addDrawerListener(object : SimpleDrawerListener() {
-            override fun onDrawerOpened(drawerView: View) {
-                val header = navView.getHeaderView(0)
-                val headerText = header.findViewById<TextView>(R.id.textViewUser)
-                val userName = AWSMobileClient.getInstance().username
-                headerText.text = userName ?: getString(R.string.auth_header_user_guest)
-            }
+//            override fun onDrawerOpened(drawerView: View) {
+//                val header = navView.getHeaderView(0)
+//                val headerText = header.findViewById<TextView>(R.id.textViewUser)
+//                val userName = AWSMobileClient.getInstance().username
+//                headerText.text = userName ?: getString(R.string.auth_header_user_guest)
+//            }
 
             override fun onDrawerClosed(drawerView: View) {
                 val header = navView.getHeaderView(0)
@@ -82,7 +92,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun setNavMenu(navView: NavigationView) {
         val header = navView.getHeaderView(0)
-        val awsClient = AWSMobileClient.getInstance()
 
         val toggleButton: ToggleButton = header.findViewById(R.id.toggleButton)
         toggleButton.setOnCheckedChangeListener { compoundButton: CompoundButton, isChecked: Boolean ->
@@ -90,9 +99,7 @@ class MainActivity : AppCompatActivity() {
                 navView.menu.clear()
                 navView.inflateMenu(R.menu.activity_auth_drawer);
 
-                val state = awsClient.currentUserState()
-
-                if(awsClient.currentUserState().userState == UserState.SIGNED_IN) {
+                if(userState == AuthStatus.SIGNED_IN) {
                     navView.menu.findItem(R.id.nav_sign_in).setVisible(false)
                     navView.menu.findItem(R.id.nav_sign_out).setVisible(true)
                     navView.menu.findItem(R.id.nav_change_password).setVisible(true)
@@ -113,7 +120,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
@@ -124,9 +130,5 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
-
-
-
-
 }
 
