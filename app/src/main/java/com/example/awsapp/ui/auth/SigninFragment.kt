@@ -35,11 +35,21 @@ class SigninFragment : Fragment(), MFADialog.VerifyCodeDialogListener {
         requireContext()
 
         viewModel.authStatus.observe(viewLifecycleOwner, Observer{
-            if(it != null && it == AuthStatus.SIGNED_IN){
-                val navController = findNavController()
-                navController.popBackStack()
-//                val newFragment = MFADialog(this)
-//                newFragment.show(childFragmentManager, null)
+            when( it ) {
+                AuthStatus.SIGNED_IN -> {
+                    val navController = findNavController()
+                    navController.popBackStack()
+                }
+                AuthStatus.NEW_PASSWORD_REQUIRED,
+                AuthStatus.SIGNED_UP_WAIT_FOR_CODE,
+                AuthStatus.SIGNED_IN_WAIT_FOR_CODE -> {
+                    val dialog = MFADialog(it, this@SigninFragment)
+                    dialog.show(childFragmentManager, null)
+                }
+            else -> {
+                    val navController = findNavController()
+                    navController.popBackStack()
+                }
             }
         })
 
@@ -79,10 +89,18 @@ class SigninFragment : Fragment(), MFADialog.VerifyCodeDialogListener {
         return root
     }
 
-    override fun onDialogPositiveClick(mfaCode: String) {
-        val toast = Toast.makeText(getActivity()?.getApplicationContext(), mfaCode, Toast.LENGTH_LONG)
-        toast.setGravity(Gravity.TOP, 8, 8)
-        toast.show()
+    override fun onDialogPositiveClick(forAuthStatus: AuthStatus, mfaCode: String) {
+        when(forAuthStatus) {
+            AuthStatus.NEW_PASSWORD_REQUIRED -> {
+                //TODO Initiate new password
+            }
+            AuthStatus.SIGNED_UP_WAIT_FOR_CODE -> {
+                //TODO Initiate sending new verification code
+            }
+            AuthStatus.SIGNED_IN_WAIT_FOR_CODE -> {
+                //TODO Initiate sending MFA
+            }
+        }
     }
 
     override fun onDialogNegativeClick() {

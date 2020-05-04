@@ -40,28 +40,22 @@ class SignupFragment : Fragment() , MFADialog.VerifyCodeDialogListener{
         val root = inflater.inflate(R.layout.auth_signup, container, false)
 
         viewModel.authStatus.observe(viewLifecycleOwner, Observer{
-            if(it != null) {
-                when( it ) {
-//                viewModel.navigateToConfirmCode(
-//                    findNavController(),
-//                    editUserName.text.toString())
-                    AuthStatus.SIGNED_UP_WAIT_FOR_CODE -> {
-                        val dialog = MFADialog(this@SignupFragment)
-
-                        dialog.show(childFragmentManager, null)
-                    }
-                    AuthStatus.SIGNED_UP,
-                        AuthStatus.SIGNED_IN ->{
-                        val navController = findNavController()
-                        navController.popBackStack()
-                    }
+            when( it ) {
+                AuthStatus.SIGNED_UP_WAIT_FOR_CODE -> {
+                    val dialog = MFADialog(it, this@SignupFragment)
+                    dialog.show(childFragmentManager, null)
+                }
+                AuthStatus.SIGNED_UP,
+                    AuthStatus.SIGNED_IN ->{
+                    val navController = findNavController()
+                    navController.popBackStack()
                 }
             }
         })
 
         viewModel.isBusy.observe(viewLifecycleOwner, Observer {
             if(it != null && it == true) {
-                //TODO refactor
+                //TODO refactor as a toggle.
                 root.findViewById<Button>(R.id.buttonSignup).isEnabled = false
                 root.findViewById<EditText>(R.id.editUserName).isEnabled = false
                 root.findViewById<EditText>(R.id.editEmail).isEnabled = false
@@ -94,14 +88,25 @@ class SignupFragment : Fragment() , MFADialog.VerifyCodeDialogListener{
         }
         return root
     }
-    override fun onDialogPositiveClick(mfaCode: String) {
-        viewModel.confirmSignup(mfaCode)
-        val toast = Toast.makeText(getActivity()?.getApplicationContext(), mfaCode, Toast.LENGTH_LONG)
-        toast.setGravity(Gravity.TOP, 8, 8)
-        toast.show()
+    override fun onDialogPositiveClick(forAuthStatus: AuthStatus, mfaCode: String) {
+        when(forAuthStatus) {
+            AuthStatus.SIGNED_UP_WAIT_FOR_CODE -> {
+                viewModel.confirmSignup(mfaCode)
+                val toast =
+                    Toast.makeText(
+                        getActivity()?.getApplicationContext(),
+                        mfaCode,
+                        Toast.LENGTH_LONG
+                    )
+                toast.setGravity(Gravity.TOP, 8, 8)
+                toast.show()
+            }
+        }
     }
 
     override fun onDialogNegativeClick() {
+        val navController = findNavController()
+        navController.popBackStack()
         val toast = Toast.makeText(getActivity()?.getApplicationContext(), "Rather Not", Toast.LENGTH_LONG)
         toast.setGravity(Gravity.TOP, 8, 8)
         toast.show()

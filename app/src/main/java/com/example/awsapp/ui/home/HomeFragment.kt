@@ -19,7 +19,7 @@ import com.example.awsapp.R
 import com.example.awsapp.ui.auth.MFADialog
 import com.example.awsapp.util.APP_TAG
 
-class HomeFragment : Fragment(), MFADialog.VerifyCodeDialogListener{
+class HomeFragment : Fragment(){
     val mLogTag = APP_TAG + this::class.java.simpleName
 
     private lateinit var homeViewModel: HomeViewModel
@@ -36,24 +36,7 @@ class HomeFragment : Fragment(), MFADialog.VerifyCodeDialogListener{
         homeViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
         })
-        root.findViewById<Button>(R.id.testSignout).apply {
-            setOnClickListener(){
-                val dialog = MFADialog(this@HomeFragment)
 
-                dialog.show(childFragmentManager, null)
-            }
-        }
         return root
-    }
-    override fun onDialogPositiveClick(mfaCode: String) {
-        val toast = Toast.makeText(getActivity()?.getApplicationContext(), mfaCode, Toast.LENGTH_LONG)
-        toast.setGravity(Gravity.TOP, 8, 8)
-        toast.show()
-    }
-
-    override fun onDialogNegativeClick() {
-        val toast = Toast.makeText(getActivity()?.getApplicationContext(), "Rather Not", Toast.LENGTH_LONG)
-        toast.setGravity(Gravity.TOP, 8, 8)
-        toast.show()
     }
 }

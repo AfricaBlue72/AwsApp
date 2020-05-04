@@ -17,6 +17,8 @@ import com.amazonaws.mobile.client.UserState
 import com.amazonaws.mobile.client.results.SignInState
 import com.amazonaws.mobile.client.results.SignUpResult
 import com.amazonaws.mobile.client.results.UserCodeDeliveryDetails
+import com.amazonaws.services.cognitoidentityprovider.model.PasswordResetRequiredException
+import com.amazonaws.services.cognitoidentityprovider.model.UserNotConfirmedException
 import com.example.awsapp.data.AppRepository
 import com.example.awsapp.data.CognitoUser
 import com.example.awsapp.data.CognitoUserDao
@@ -138,6 +140,16 @@ class AwsAuthProvider() : BaseAuthProvider {
             }
             result.providerResult = signInResult
             this.userName.postValue(userName)
+        }
+        catch (e: UserNotConfirmedException){
+            Log.w(mLogTag, "Error: " + e.message)
+            result.status = AuthStatus.SIGNED_UP_WAIT_FOR_CODE
+            result.message = e.message
+        }
+        catch (e: PasswordResetRequiredException){
+            Log.w(mLogTag, "Error: " + e.message)
+            result.status = AuthStatus.NEW_PASSWORD_REQUIRED
+            result.message = e.message
         }
         catch(e: Exception){
             Log.w(mLogTag, "Error: " + e.message)
