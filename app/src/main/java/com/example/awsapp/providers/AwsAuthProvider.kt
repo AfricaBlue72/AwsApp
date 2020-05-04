@@ -54,7 +54,6 @@ class AwsAuthProvider() : BaseAuthProvider {
         val name = AWSMobileClient.getInstance().username ?:
                 Application.applicationContext().getString(R.string.auth_header_user_guest)
         userName.postValue(name)
-
     }
 
     private fun updateState(){
@@ -74,13 +73,13 @@ class AwsAuthProvider() : BaseAuthProvider {
                 userAttributes,
                 null
             )
-            if(signUpResult.confirmationState == true){
-                result.status = AuthStatus.SIGNED_UP
-            }else{
-//                TODO("Take UserCodeDeliveryDetails into account")
+            if(signUpResult.confirmationState == false){
                 result.status = AuthStatus.SIGNED_UP_WAIT_FOR_CODE
+            }else{
+                result.status = AuthStatus.SIGNED_UP
             }
             result.providerResult = signUpResult
+            this.userName.postValue(userName)
         }
         catch(e: Exception){
             Log.w(mLogTag, "Error: " + e.message)
@@ -88,7 +87,7 @@ class AwsAuthProvider() : BaseAuthProvider {
             result.message = e.message
         }
         finally {
-            updateState()
+            this.currentUserState.postValue(result.status)
             return result
         }
     }
@@ -105,6 +104,7 @@ class AwsAuthProvider() : BaseAuthProvider {
                 result.status = AuthStatus.SIGNED_UP_WAIT_FOR_CODE
             }
             result.providerResult = signUpResult
+            this.userName.postValue(userName)
         }
         catch(e: Exception){
             Log.w(mLogTag, "Error: " + e.message)
@@ -112,7 +112,7 @@ class AwsAuthProvider() : BaseAuthProvider {
             result.message = e.message
         }
         finally {
-            updateState()
+            this.currentUserState.postValue(result.status)
             return result
         }
     }
@@ -137,6 +137,7 @@ class AwsAuthProvider() : BaseAuthProvider {
                 }
             }
             result.providerResult = signInResult
+            this.userName.postValue(userName)
         }
         catch(e: Exception){
             Log.w(mLogTag, "Error: " + e.message)
@@ -144,7 +145,7 @@ class AwsAuthProvider() : BaseAuthProvider {
             result.message = e.message
         }
         finally {
-            updateState()
+            this.currentUserState.postValue(result.status)
             return result
         }
     }
@@ -159,6 +160,7 @@ class AwsAuthProvider() : BaseAuthProvider {
                     .invalidateTokens(invalidateTokens)
                     .build())
             result.status = AuthStatus.SIGNED_OUT
+            userName.postValue(Application.applicationContext().getString(R.string.auth_header_user_guest))
         }
         catch(e: Exception){
             Log.w(mLogTag, "Error: " + e.message)
@@ -166,7 +168,7 @@ class AwsAuthProvider() : BaseAuthProvider {
             result.message = e.message
         }
         finally {
-            updateState()
+            this.currentUserState.postValue(result.status)
             return result
         }
     }

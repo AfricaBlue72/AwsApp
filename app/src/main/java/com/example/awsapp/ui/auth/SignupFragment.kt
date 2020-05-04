@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -24,7 +25,7 @@ import com.example.awsapp.util.InjectorUtils
 import kotlinx.android.synthetic.main.auth_signup.*
 
 
-class SignupFragment : Fragment() {
+class SignupFragment : Fragment() , MFADialog.VerifyCodeDialogListener{
 
     val mLogTag = APP_TAG + this::class.java.simpleName
     val viewModel: SignupViewModel by viewModels{
@@ -39,20 +40,39 @@ class SignupFragment : Fragment() {
         val root = inflater.inflate(R.layout.auth_signup, container, false)
 
         viewModel.authStatus.observe(viewLifecycleOwner, Observer{
-            if(it != null && it == AuthStatus.SIGNED_IN_WAIT_FOR_CODE){
-                viewModel.navigateToConfirmCode(
-                    findNavController(),
-                    editUserName.text.toString())
+            if(it != null) {
+                when( it ) {
+//                viewModel.navigateToConfirmCode(
+//                    findNavController(),
+//                    editUserName.text.toString())
+                    AuthStatus.SIGNED_UP_WAIT_FOR_CODE -> {
+                        val dialog = MFADialog(this@SignupFragment)
+
+                        dialog.show(childFragmentManager, null)
+                    }
+                    AuthStatus.SIGNED_UP,
+                        AuthStatus.SIGNED_IN ->{
+                        val navController = findNavController()
+                        navController.popBackStack()
+                    }
+                }
             }
         })
 
         viewModel.isBusy.observe(viewLifecycleOwner, Observer {
             if(it != null && it == true) {
+                //TODO refactor
                 root.findViewById<Button>(R.id.buttonSignup).isEnabled = false
+                root.findViewById<EditText>(R.id.editUserName).isEnabled = false
+                root.findViewById<EditText>(R.id.editEmail).isEnabled = false
+                root.findViewById<EditText>(R.id.editPassword).isEnabled = false
                 root.findViewById<ProgressBar>(R.id.progressBar).visibility = View.VISIBLE
             }
             if(it != null && it == false) {
                 root.findViewById<Button>(R.id.buttonSignup).isEnabled = true
+                root.findViewById<EditText>(R.id.editUserName).isEnabled = true
+                root.findViewById<EditText>(R.id.editEmail).isEnabled = true
+                root.findViewById<EditText>(R.id.editPassword).isEnabled = true
                 root.findViewById<ProgressBar>(R.id.progressBar).visibility = View.INVISIBLE
             }
         })
@@ -68,13 +88,22 @@ class SignupFragment : Fragment() {
                 viewModel.signup(
                     editUserName.text.toString(),
                     editEmail.text.toString(),
-                    editPassword.text.toString(),
-                    editFirstName.text.toString(),
-                    editLastName.text.toString(),
-                    editAge.text.toString()
+                    editPassword.text.toString()
                 )
             }
         }
         return root
+    }
+    override fun onDialogPositiveClick(mfaCode: String) {
+        viewModel.confirmSignup(mfaCode)
+        val toast = Toast.makeText(getActivity()?.getApplicationContext(), mfaCode, Toast.LENGTH_LONG)
+        toast.setGravity(Gravity.TOP, 8, 8)
+        toast.show()
+    }
+
+    override fun onDialogNegativeClick() {
+        val toast = Toast.makeText(getActivity()?.getApplicationContext(), "Rather Not", Toast.LENGTH_LONG)
+        toast.setGravity(Gravity.TOP, 8, 8)
+        toast.show()
     }
 }

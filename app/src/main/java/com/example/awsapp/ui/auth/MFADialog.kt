@@ -1,14 +1,18 @@
 package com.example.awsapp.ui.auth
 
 import android.app.Dialog
-import android.content.DialogInterface
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.inputmethod.InputMethodManager
+import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.DialogFragment
 import com.example.awsapp.R
+
 
 class MFADialog(listener: VerifyCodeDialogListener) : DialogFragment() {
     internal var listener = listener
@@ -19,30 +23,35 @@ class MFADialog(listener: VerifyCodeDialogListener) : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = super.onCreateDialog(savedInstanceState)
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        super.onCreateDialog(savedInstanceState)
 
         return activity?.let {
             // Build the dialog and set up the button click handlers
             val builder = AlertDialog.Builder(it)
             val inflater = requireActivity().layoutInflater;
             val view = inflater.inflate(R.layout.auth_mfa_dialog, null)
-//            view.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+            val submitButton = view.findViewById<Button>(R.id.buttonSubmit)
+            submitButton.setOnClickListener{
+                val code = view.findViewById<EditText>(R.id.editTextCode).text.toString()
+                listener.onDialogPositiveClick(code)
+                dismiss()
+            }
+
+            val cancelButton = view.findViewById<Button>(R.id.buttonCancel)
+            cancelButton.setOnClickListener{
+                dismiss()
+            }
+
+            val editCode = view.findViewById<EditText>(R.id.editTextCode)
+            editCode.requestFocus()
 
             builder.setView(view)
-                .setPositiveButton("Confirm",
-                    DialogInterface.OnClickListener { dialog, id ->
-                        // Send the positive button event back to the host activity
-                        val code = view.findViewById<EditText>(R.id.editTextCode).text.toString()
-                        listener.onDialogPositiveClick(code)
-                    })
-                .setNegativeButton("Cancel",
-                    DialogInterface.OnClickListener { dialog, id ->
-                        // Send the negative button event back to the host activity
-                        listener.onDialogNegativeClick()
-                    })
+            val dialog = builder.create()
+            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            isCancelable = false
 
-            builder.create()
+            dialog
         } ?: throw IllegalStateException("Activity cannot be null")
     }
 }

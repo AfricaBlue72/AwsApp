@@ -16,14 +16,11 @@ abstract class BaseAuthViewModel(context: Context, authProvider: BaseAuthProvide
     var isBusy = MutableLiveData<Boolean>().apply{
         value = false
     }
-    var authStatus = MutableLiveData<AuthStatus>().apply{
-        value = AuthStatus.UNKNOWN
-    }
 
     var feedback = MutableLiveData<String?>()
 
     val userName = authProvider.userName
-    val currentUserState = authProvider.currentUserState
+    val authStatus = authProvider.currentUserState
 
 //    protected val authProvider: AwsAuthProvider
 //        get() {

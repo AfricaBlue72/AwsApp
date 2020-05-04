@@ -18,6 +18,8 @@
     <string name="auth_signin_hint">Username or email</string>
     <string name="auth_signin">Log in</string>
     <string name="auth_signout">Log out</string>
+    <string name="auth_mfa_submit">Submit</string>
+    <string name="auth_mfa_cancel_submit">Cancel</string>
     <string name="auth_forgot_password">Forgot password</string>
     <string name="auth_verification_code">Enter code</string>
     <string name="auth_verification_code_ok">Confirm</string>

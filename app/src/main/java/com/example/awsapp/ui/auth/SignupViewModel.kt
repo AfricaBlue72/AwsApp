@@ -16,26 +16,14 @@ class SignupViewModel(context: Context, authProvider: BaseAuthProvider)
     : BaseAuthViewModel(context,authProvider){
     private val mLogTag = APP_TAG + this::class.java.simpleName
 
-//    private val appRepository: AppRepository
-//        get() {
-//            val repo = InjectorUtils.getAppRepository(context)
-//            return repo
-//        }
-
     fun signup(
         userName: String,
         email: String,
-        password: String,
-        firstName: String,
-        lastName: String,
-        age: String
+        password: String
     ){
         isBusy.value = true
         val userAttributes = mutableMapOf<String, String>()
         userAttributes["email"] = email
-        userAttributes["custom:FirstName"] = firstName
-        userAttributes["custom:LastName"] = lastName
-        userAttributes["custom:Age"] = age
 
         viewModelScope.launch {
             _signup(userName,
@@ -51,7 +39,7 @@ class SignupViewModel(context: Context, authProvider: BaseAuthProvider)
 
         val result = authProvider.signup(userName, password, userAttributes)
 
-        authStatus.postValue(result.status)
+        //authStatus.postValue(result.status)
 
         if(result.status == AuthStatus.UNKNOWN || result.status == AuthStatus.ERROR){
             feedback.postValue( context.getString(R.string.auth_message_signup_nok) )
@@ -60,63 +48,40 @@ class SignupViewModel(context: Context, authProvider: BaseAuthProvider)
             feedback.postValue( context.getString(R.string.auth_message_signup_ok) )
         }
     }
-//    fun signup(
-//        userName: String,
-//        email: String,
-//        password: String,
-//        firstName: String,
-//        lastName: String,
-//        age: String
-//    ) {
-//        isBusy.value = true
-//        val userAttributes = mutableMapOf<String, String>()
-//        userAttributes["email"] = email
-//        userAttributes["custom:FirstName"] = firstName
-//        userAttributes["custom:LastName"] = lastName
-//        userAttributes["custom:Age"] = age
-//
-//        AWSMobileClient.getInstance().signUp(
-//            userName,
-//            password,
-//            userAttributes,
-//            null,
-//            object : Callback<SignUpResult> {
-//                override fun onResult(result: SignUpResult?) {
-//                    isBusy.postValue(false)
-//                    Log.i(mLogTag, "SignUpResult: " + result?.userCodeDeliveryDetails?.deliveryMedium)
-//                    Log.i(mLogTag, "SignUpResult: " + result?.userCodeDeliveryDetails?.attributeName)
-//                    Log.i(mLogTag, "SignUpResult: " + result?.userCodeDeliveryDetails?.destination)
-//                    Log.i(mLogTag, "SignUpResult: " + result?.userSub)
-//                    Log.i(mLogTag, "User: " + AWSMobileClient.getInstance().username)
-//                    val details =  AWSMobileClient.getInstance().currentUserState().details
-//                    Log.i(mLogTag, "Signup succesful")
-//
-//                    val user = CognitoUser(
-//                        result?.userSub,
-//                        userName,
-//                        StringUtils.obscureEmail(email),
-//                        firstName,
-//                        lastName,
-//                        age,
-//                        AuthStatus.SIGNED_UP_WAIT_FOR_CODE)
-//
-//                    authStatus.postValue(AuthStatus.SIGNED_IN_WAIT_FOR_CODE)
-//                }
-//
-//                override fun onError(e: Exception?) {
-//                    isBusy.postValue(false)
-//                    authStatus.postValue(AuthStatus.SIGNED_UP_NOK)
-//                    feedback.postValue(context.getString(R.string.auth_message_signup_nok))
-//                    Log.e(mLogTag, "Signup error.", e)
-//                }
-//            })
-//    }
 
-    fun navigateToConfirmCode(navController: NavController, userName: String){
-        authStatus.value = AuthStatus.CONFIRMING_CODE
-        val action = ConfirmCodeFragmentDirections.actionGlobalConfirmCodeFragment(
-            userName , 1)
-        navController.navigate(action)
-        //TODO ("Remove navigating in ViewModel")
+    fun confirmSignup(code: String){
+        confirmSignup(userName.value.toString(), code)
     }
+
+    fun confirmSignup(userName: String, code: String){
+        isBusy.value = true
+
+        viewModelScope.launch {
+            _confirmSignup(userName, code)
+            isBusy.postValue(false)
+        }
+    }
+
+    private suspend fun _confirmSignup(userName: String, code: String) = withContext(
+        Dispatchers.IO){
+
+        val result = authProvider.confirmSignup(userName, code)
+
+        //authStatus.postValue(result.status)
+
+        if(result.status == AuthStatus.UNKNOWN || result.status == AuthStatus.ERROR){
+            feedback.postValue( context.getString(R.string.auth_message_confirm_code_nok) )
+        }
+        else{
+            feedback.postValue( context.getString(R.string.auth_message_confirm_code_ok) )
+        }
+    }
+
+//    fun navigateToConfirmCode(navController: NavController, userName: String){
+//        authStatus.value = AuthStatus.CONFIRMING_CODE
+//        val action = ConfirmCodeFragmentDirections.actionGlobalConfirmCodeFragment(
+//            userName , 1)
+//        navController.navigate(action)
+//        //TODO ("Remove navigating in ViewModel")
+//    }
 }

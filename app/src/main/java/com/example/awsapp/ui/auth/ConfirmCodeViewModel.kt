@@ -29,7 +29,7 @@ class ConfirmCodeViewModel (context: Context, authProvider: BaseAuthProvider)
 
         val result = authProvider.confirmSignup(userName, code)
 
-        authStatus.postValue(result.status)
+        //authStatus.postValue(result.status)
 
         if(result.status == AuthStatus.UNKNOWN || result.status == AuthStatus.ERROR){
             feedback.postValue( context.getString(R.string.auth_message_confirm_code_nok) )

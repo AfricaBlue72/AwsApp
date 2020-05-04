@@ -27,7 +27,7 @@ class SigninViewModel(context: Context, authProvider: BaseAuthProvider)
 
         val result = authProvider.signin(userName, password)
 
-        authStatus.postValue(result.status)
+        //authStatus.postValue(result.status)
 
         if(result.status == AuthStatus.UNKNOWN || result.status == AuthStatus.ERROR){
             feedback.postValue( context.applicationContext.getString(R.string.auth_message_signin_nok) )

@@ -3,6 +3,10 @@
 *.ap_
 *.aab
 
+# Cognito details
+*/awsconfiguration.json
+
+
 # Files for the ART/Dalvik VM
 *.dex
 
