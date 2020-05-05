@@ -1,6 +1,5 @@
 package com.example.awsapp.ui.auth
 
-import android.app.Application
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -19,7 +18,7 @@ import com.example.awsapp.util.APP_TAG
 import com.example.awsapp.util.InjectorUtils
 import kotlinx.android.synthetic.main.auth_signin.*
 
-class SigninFragment : Fragment(), MFADialog.VerifyCodeDialogListener {
+class SigninFragment : Fragment(), FlowDialog.VerifyCodeDialogListener {
     val mLogTag = APP_TAG + this::class.java.simpleName
     private val viewModel: SigninViewModel by viewModels{
         InjectorUtils.provideSigninViewModelFactory(requireContext())
@@ -43,12 +42,8 @@ class SigninFragment : Fragment(), MFADialog.VerifyCodeDialogListener {
                 AuthStatus.NEW_PASSWORD_REQUIRED,
                 AuthStatus.SIGNED_UP_WAIT_FOR_CODE,
                 AuthStatus.SIGNED_IN_WAIT_FOR_CODE -> {
-                    val dialog = MFADialog(it, this@SigninFragment)
+                    val dialog = FlowDialog(it, this@SigninFragment)
                     dialog.show(childFragmentManager, null)
-                }
-            else -> {
-                    val navController = findNavController()
-                    navController.popBackStack()
                 }
             }
         })

@@ -1,7 +1,6 @@
 package com.example.awsapp.ui.auth
 
 import android.app.Dialog
-import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -10,18 +9,19 @@ import android.text.method.PasswordTransformationMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat.getSystemService
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
+import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import com.example.awsapp.R
 import com.example.awsapp.providers.AuthStatus
 
 
-class MFADialog(forAuthStatus: AuthStatus, listener: VerifyCodeDialogListener) : DialogFragment() {
+class FlowDialog(forAuthStatus: AuthStatus, listener: VerifyCodeDialogListener) : DialogFragment() {
     internal var listener = listener
     internal val forAuthStatus = forAuthStatus
 
@@ -57,14 +57,18 @@ class MFADialog(forAuthStatus: AuthStatus, listener: VerifyCodeDialogListener) :
             val inflater = requireActivity().layoutInflater;
             val view = inflater.inflate(R.layout.auth_mfa_dialog, null)
 
-            if(forAuthStatus == AuthStatus.NEW_PASSWORD_REQUIRED){
-                val header = view.findViewById<TextView>(R.id.textViewHeader)
-                header.setText(R.string.auth_new_password)
-
-                val editCode = view.findViewById<EditText>(R.id.editTextCode)
-                editCode.setHint(R.string.auth_new_password_hint)
-                editCode.inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD
-                editCode.setTransformationMethod(PasswordTransformationMethod.getInstance());
+            when(forAuthStatus) {
+                AuthStatus.NEW_PASSWORD_REQUIRED -> {
+                    setupForNewPassword(view)
+                    hideResendButton(view)
+                }
+                AuthStatus.SIGNED_UP_WAIT_FOR_CODE -> {
+                    val resendButton = view.findViewById<Button>(R.id.buttonResendCode)
+                    resendButton.isVisible = true
+                }
+                else ->{
+                    hideResendButton(view)
+                }
             }
 
             val submitButton = view.findViewById<Button>(R.id.buttonSubmit)
@@ -90,5 +94,31 @@ class MFADialog(forAuthStatus: AuthStatus, listener: VerifyCodeDialogListener) :
 
             dialog
         } ?: throw IllegalStateException("Activity cannot be null")
+    }
+
+    private fun setupForNewPassword(view: View) {
+        val header = view.findViewById<TextView>(R.id.textViewHeader)
+        header.setText(R.string.auth_new_password)
+
+        val editCode = view.findViewById<EditText>(R.id.editTextCode)
+        editCode.setHint(R.string.auth_new_password_hint)
+        editCode.inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD
+        editCode.setTransformationMethod(PasswordTransformationMethod.getInstance());
+    }
+
+    private fun hideResendButton(view: View) {
+        val resendButton = view.findViewById<Button>(R.id.buttonResendCode)
+        resendButton.isVisible = true
+        val constraintLayout = view.findViewById<ConstraintLayout>(R.id.frameLayoutForFlow)
+        val constraintSet = ConstraintSet()
+        constraintSet.clone(constraintLayout)
+        constraintSet.connect(
+            R.id.divider,
+            ConstraintSet.TOP,
+            R.id.editTextCode,
+            ConstraintSet.BOTTOM,
+            8
+        )
+        constraintSet.applyTo(constraintLayout)
     }
 }
