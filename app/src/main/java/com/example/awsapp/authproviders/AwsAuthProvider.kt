@@ -203,44 +203,47 @@ class AwsAuthProvider() : BaseAuthProvider {
         }
     }
 
-    override fun forgotPassword(userName: String): ForgotPasswordResult {
-        var result: ForgotPasswordResult = ForgotPasswordResult()
+    override fun forgotPassword(userName: String): AuthResult {
+        val result: AuthResult = AuthResult()
 
         try {
             val forgotPasswordResult = AWSMobileClient.getInstance().forgotPassword(userName)
             when(forgotPasswordResult.state){
-                ForgotPasswordState.CONFIRMATION_CODE -> result.status = ForgotPasswordStatus.CONFIRM
-                ForgotPasswordState.DONE -> result.status = ForgotPasswordStatus.DONE
-            else-> result.status = ForgotPasswordStatus.UNKNOWN
+                ForgotPasswordState.CONFIRMATION_CODE -> result.forgotPasswordStatus = ForgotPasswordStatus.CONFIRM
+                ForgotPasswordState.DONE -> result.forgotPasswordStatus = ForgotPasswordStatus.DONE
+            else-> result.forgotPasswordStatus = ForgotPasswordStatus.UNKNOWN
             }
+            result.providerResult = forgotPasswordResult
         }
         catch(e: Exception){
             Log.w(mLogTag, "Error: " + e.message)
-            result.status = ForgotPasswordStatus.ERROR
+            result.forgotPasswordStatus = ForgotPasswordStatus.ERROR
         }
         finally {
-            this.forgotPasswordState.postValue(result.status)
+            this.forgotPasswordState.postValue(result.forgotPasswordStatus)
             return result
         }
     }
 
-    override fun confirmForgotPassword(userName: String, code: String): ForgotPasswordResult {
-        var result: ForgotPasswordResult = ForgotPasswordResult()
+    override fun confirmForgotPassword(userName: String, code: String): AuthResult {
+        val result: AuthResult = AuthResult()
 
         try {
             val forgotPasswordResult = AWSMobileClient.getInstance().confirmForgotPassword(userName, code)
             when(forgotPasswordResult.state){
-                ForgotPasswordState.CONFIRMATION_CODE -> result.status = ForgotPasswordStatus.CONFIRM
-                ForgotPasswordState.DONE -> result.status = ForgotPasswordStatus.DONE
-                else-> result.status = ForgotPasswordStatus.UNKNOWN
+                ForgotPasswordState.CONFIRMATION_CODE -> result.forgotPasswordStatus = ForgotPasswordStatus.CONFIRM
+                ForgotPasswordState.DONE -> result.forgotPasswordStatus = ForgotPasswordStatus.DONE
+                else-> result.forgotPasswordStatus = ForgotPasswordStatus.UNKNOWN
             }
+            result.providerResult = forgotPasswordResult
         }
         catch(e: Exception){
             Log.w(mLogTag, "Error: " + e.message)
-            result.status = ForgotPasswordStatus.ERROR
+            result.message = e.message
+            result.forgotPasswordStatus = ForgotPasswordStatus.ERROR
         }
         finally {
-            this.forgotPasswordState.postValue(result.status)
+            this.forgotPasswordState.postValue(result.forgotPasswordStatus)
             return result
         }
     }

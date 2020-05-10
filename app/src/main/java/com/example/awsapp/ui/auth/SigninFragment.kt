@@ -81,6 +81,12 @@ class SigninFragment : Fragment(), FlowDialog.VerifyCodeDialogListener {
             }
         }
 
+        root.findViewById<Button>(R.id.buttonForgotPassword).apply {
+            setOnClickListener {
+                findNavController().navigate(R.id.action_nav_sign_in_to_forgotPasswordFragment)
+            }
+        }
+
         return root
     }
 
@@ -88,12 +94,16 @@ class SigninFragment : Fragment(), FlowDialog.VerifyCodeDialogListener {
         when(forAuthStatus) {
             AuthStatus.NEW_PASSWORD_REQUIRED -> {
                 //TODO Initiate new password
+//                public void confirmSignIn(new password,
+//                    Callback<SignInResult> callback)
             }
             AuthStatus.SIGNED_UP_WAIT_FOR_CODE -> {
                 //TODO Initiate sending new verification code
             }
             AuthStatus.SIGNED_IN_WAIT_FOR_CODE -> {
                 //TODO Initiate sending MFA
+//                public void confirmSignIn(mfa code,
+//                    Callback<SignInResult> callback)
             }
         }
     }
@@ -103,6 +113,4 @@ class SigninFragment : Fragment(), FlowDialog.VerifyCodeDialogListener {
         toast.setGravity(Gravity.TOP, 8, 8)
         toast.show()
     }
-
-
 }

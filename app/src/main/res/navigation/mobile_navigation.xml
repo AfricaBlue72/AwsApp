@@ -50,6 +50,9 @@
         <action
             android:id="@+id/action_signinFragment_to_signupFragment"
             app:destination="@id/nav_sign_up" />
+        <action
+            android:id="@+id/action_nav_sign_in_to_forgotPasswordFragment"
+            app:destination="@id/nav_forgot_password" />
     </fragment>
     <fragment
         android:id="@+id/nav_sign_up"
@@ -83,4 +86,9 @@
         android:name="com.example.awsapp.ui.auth.SignoutFragment"
         android:label="@string/auth_signout_fragment" />
     <action android:id="@+id/action_global_nav_sign_out" app:destination="@id/nav_sign_out" />
+    <fragment
+        android:id="@+id/nav_forgot_password"
+        android:name="com.example.awsapp.ui.auth.ForgotPasswordFragment"
+        android:label="@string/auth_forgot_password" />
+    <action android:id="@+id/action_global_forgotPasswordFragment" app:destination="@id/nav_forgot_password" />
 </navigation>

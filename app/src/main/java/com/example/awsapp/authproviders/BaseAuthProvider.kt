@@ -19,7 +19,7 @@ interface  BaseAuthProvider {
 
     fun signout(signOutGlobally: Boolean, invalidateTokens: Boolean): AuthResult
 
-    fun forgotPassword(userName: String): ForgotPasswordResult
+    fun forgotPassword(userName: String): AuthResult
 
-    fun confirmForgotPassword(userName: String, code: String): ForgotPasswordResult
+    fun confirmForgotPassword(userName: String, code: String): AuthResult
 }

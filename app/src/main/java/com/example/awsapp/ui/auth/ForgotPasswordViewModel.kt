@@ -29,7 +29,7 @@ class ForgotPasswordViewModel (context: Context, authProvider: BaseAuthProvider)
 
         val result = authProvider.forgotPassword(userName)
 
-        if(result.status == ForgotPasswordStatus.ERROR || result.status == ForgotPasswordStatus.UNKNOWN){
+        if(result.forgotPasswordStatus == ForgotPasswordStatus.ERROR || result.forgotPasswordStatus == ForgotPasswordStatus.UNKNOWN){
             feedback.postValue( context.applicationContext.getString(R.string.auth_message_forgot_password_nok) )
         }
         else{
@@ -50,7 +50,7 @@ class ForgotPasswordViewModel (context: Context, authProvider: BaseAuthProvider)
 
         val result = authProvider.confirmForgotPassword(userName, code)
 
-        if(result.status == ForgotPasswordStatus.ERROR || result.status == ForgotPasswordStatus.UNKNOWN){
+        if(result.forgotPasswordStatus == ForgotPasswordStatus.ERROR || result.forgotPasswordStatus == ForgotPasswordStatus.UNKNOWN){
             feedback.postValue( context.applicationContext.getString(R.string.auth_message_forgot_password_nok) )
         }
         else{

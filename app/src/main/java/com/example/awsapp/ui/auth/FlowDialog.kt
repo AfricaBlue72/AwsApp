@@ -38,33 +38,23 @@ class FlowDialog(forAuthStatus: AuthStatus, listener: VerifyCodeDialogListener) 
         fun onDialogNegativeClick()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val root = inflater.inflate(R.layout.auth_flow_dialog, container, false)
-
-        if(forAuthStatus == AuthStatus.NEW_PASSWORD_REQUIRED){
-            val header = root.findViewById<TextView>(R.id.textViewHeader)
-            header.setText(R.string.auth_new_password)
-
-            val editCode = root.findViewById<EditText>(R.id.editTextCode)
-            editCode.setHint(R.string.auth_verification_code_hint)
-        }
-
-
-        val buttonUser = root.findViewById<Button>(R.id.buttonUser)
-        val editTextUser = root.findViewById<EditText>(R.id.editTextUser)
-        buttonUser.text = viewModel.userName.value
-        editTextUser.setText(viewModel.userName.value)
-        buttonUser.setOnClickListener(){
-            editTextUser.isVisible = true
-            buttonUser.isVisible = false
-        }
-
-        return root
-    }
+//    override fun onCreateView(
+//        inflater: LayoutInflater,
+//        container: ViewGroup?,
+//        savedInstanceState: Bundle?
+//    ): View? {
+//        val root = inflater.inflate(R.layout.auth_flow_dialog, container, false)
+//
+//        if(forAuthStatus == AuthStatus.NEW_PASSWORD_REQUIRED){
+//            val header = root.findViewById<TextView>(R.id.textViewHeader)
+//            header.setText(R.string.auth_new_password)
+//
+//            val editCode = root.findViewById<EditText>(R.id.editTextCode)
+//            editCode.setHint(R.string.auth_verification_code_hint)
+//        }
+//
+//        return root
+//    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         super.onCreateDialog(savedInstanceState)
