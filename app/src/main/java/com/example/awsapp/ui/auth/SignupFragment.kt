@@ -14,9 +14,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.awsapp.R
-import com.example.awsapp.providers.AuthStatus
+import com.example.awsapp.authproviders.AuthStatus
 import com.example.awsapp.util.APP_TAG
-import com.example.awsapp.util.InjectorUtils
+import com.example.awsapp.authproviders.AuthInjectorUtils
 import kotlinx.android.synthetic.main.auth_signup.*
 
 
@@ -24,7 +24,7 @@ class SignupFragment : Fragment() , FlowDialog.VerifyCodeDialogListener{
 
     val mLogTag = APP_TAG + this::class.java.simpleName
     val viewModel: SignupViewModel by viewModels{
-        InjectorUtils.provideSignupViewModelFactory(requireContext())
+        AuthInjectorUtils.provideSignupViewModelFactory(requireContext())
     }
 
     override fun onCreateView(
@@ -87,14 +87,6 @@ class SignupFragment : Fragment() , FlowDialog.VerifyCodeDialogListener{
         when(forAuthStatus) {
             AuthStatus.SIGNED_UP_WAIT_FOR_CODE -> {
                 viewModel.confirmSignup(mfaCode)
-                val toast =
-                    Toast.makeText(
-                        getActivity()?.getApplicationContext(),
-                        mfaCode,
-                        Toast.LENGTH_LONG
-                    )
-                toast.setGravity(Gravity.TOP, 8, 8)
-                toast.show()
             }
         }
     }
@@ -102,8 +94,5 @@ class SignupFragment : Fragment() , FlowDialog.VerifyCodeDialogListener{
     override fun onDialogNegativeClick() {
         val navController = findNavController()
         navController.popBackStack()
-        val toast = Toast.makeText(getActivity()?.getApplicationContext(), "Rather Not", Toast.LENGTH_LONG)
-        toast.setGravity(Gravity.TOP, 8, 8)
-        toast.show()
     }
 }

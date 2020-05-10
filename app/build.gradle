@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
+apply plugin: 'com.amplifyframework.amplifytools'
 
 android {
     compileSdkVersion 29
@@ -40,8 +41,9 @@ android {
 }
 
 ext {
-    aws_sdk_version = "2.16.+"
+    aws_sdk_version = "2.16.12"
     room_version = "2.2.5"
+    amplify_version = "0.10.0"
 }
 dependencies {
     kapt "androidx.room:room-compiler:$room_version"
@@ -61,6 +63,9 @@ dependencies {
     implementation "androidx.room:room-ktx:$room_version"
 
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0-alpha01"
+
+    implementation "com.amplifyframework:core:$amplify_version"
+    implementation "com.amplifyframework:aws-api:$amplify_version"
 
     implementation("com.amazonaws:aws-android-sdk-mobile-client:$aws_sdk_version@aar") {
         transitive = true

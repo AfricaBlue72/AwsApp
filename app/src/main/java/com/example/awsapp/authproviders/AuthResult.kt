@@ -1,4 +1,4 @@
-package com.example.awsapp.providers
+package com.example.awsapp.authproviders
 
 class AuthResult constructor(
     var status: AuthStatus = AuthStatus.UNKNOWN,

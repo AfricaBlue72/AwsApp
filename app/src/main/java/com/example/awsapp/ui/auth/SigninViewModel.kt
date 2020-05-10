@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.example.awsapp.util.APP_TAG
 import com.example.awsapp.R
-import com.example.awsapp.providers.*
+import com.example.awsapp.authproviders.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

@@ -18,9 +18,8 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.amazonaws.mobile.client.UserState
-import com.example.awsapp.providers.AuthStatus
-import com.example.awsapp.util.InjectorUtils
+import com.example.awsapp.authproviders.AuthStatus
+import com.example.awsapp.authproviders.AuthInjectorUtils
 import com.google.android.material.navigation.NavigationView
 
 
@@ -28,7 +27,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private val viewModel: MainActivityViewModel by viewModels{
-        InjectorUtils.provideMainActivityViewModelFactory()
+        AuthInjectorUtils.provideMainActivityViewModelFactory()
     }
     private var userState = AuthStatus.UNKNOWN
 

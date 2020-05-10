@@ -1,11 +1,9 @@
 package com.example.awsapp.ui.auth
 
 import android.content.Context
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.awsapp.providers.AuthStatus
-import com.example.awsapp.providers.BaseAuthProvider
+import com.example.awsapp.authproviders.BaseAuthProvider
 import com.example.awsapp.util.APP_TAG
 
 abstract class BaseAuthViewModel(context: Context, authProvider: BaseAuthProvider) : ViewModel(){

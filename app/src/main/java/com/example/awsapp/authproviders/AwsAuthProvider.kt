@@ -1,39 +1,31 @@
-package com.example.awsapp.providers
+package com.example.awsapp.authproviders
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.amazonaws.mobile.client.AWSMobileClient
-import com.amazonaws.mobile.client.Callback
-import com.amazonaws.mobile.client.results.SignInResult
 import com.example.awsapp.R
 import com.example.awsapp.util.APP_TAG
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.withContext
 import java.lang.Exception
-import androidx.lifecycle.liveData
 import com.amazonaws.mobile.client.SignOutOptions
 import com.amazonaws.mobile.client.UserState
+import com.amazonaws.mobile.client.results.ForgotPasswordState
 import com.amazonaws.mobile.client.results.SignInState
-import com.amazonaws.mobile.client.results.SignUpResult
-import com.amazonaws.mobile.client.results.UserCodeDeliveryDetails
 import com.amazonaws.services.cognitoidentityprovider.model.PasswordResetRequiredException
 import com.amazonaws.services.cognitoidentityprovider.model.UserNotConfirmedException
-import com.example.awsapp.data.AppRepository
-import com.example.awsapp.data.CognitoUser
-import com.example.awsapp.data.CognitoUserDao
 import com.example.awsapp.lifecycle.Application
-import com.example.awsapp.util.StringUtils
 
 class AwsAuthProvider() : BaseAuthProvider {
     val mLogTag = APP_TAG + this::class.java.simpleName
 
-    override val userName = MutableLiveData<String>().apply{
-        value = Application.applicationContext().getString(R.string.auth_header_user_guest)
+    override val userName = MutableLiveData<String>().apply {
+        value = Application.applicationContext().getString(R.string.auth_guest_user)
     }
-   override val currentUserState = MutableLiveData<AuthStatus>().apply{
-       value = AuthStatus.UNKNOWN
-   }
+    override val currentUserState = MutableLiveData<AuthStatus>().apply {
+        value = AuthStatus.UNKNOWN
+    }
+    override val forgotPasswordState = MutableLiveData<ForgotPasswordStatus>().apply{
+        value = ForgotPasswordStatus.UNKNOWN
+}
 
     init{
         updateState()
@@ -54,7 +46,7 @@ class AwsAuthProvider() : BaseAuthProvider {
 
     private fun updateUserName() {
         val name = AWSMobileClient.getInstance().username ?:
-                Application.applicationContext().getString(R.string.auth_header_user_guest)
+                Application.applicationContext().getString(R.string.auth_guest_user)
         userName.postValue(name)
     }
 
@@ -74,6 +66,32 @@ class AwsAuthProvider() : BaseAuthProvider {
                 password,
                 userAttributes,
                 null
+            )
+            if(signUpResult.confirmationState == false){
+                result.status = AuthStatus.SIGNED_UP_WAIT_FOR_CODE
+            }else{
+                result.status = AuthStatus.SIGNED_UP
+            }
+            result.providerResult = signUpResult
+            this.userName.postValue(userName)
+        }
+        catch(e: Exception){
+            Log.w(mLogTag, "Error: " + e.message)
+            result.status = AuthStatus.ERROR
+            result.message = e.message
+        }
+        finally {
+            this.currentUserState.postValue(result.status)
+            return result
+        }
+    }
+
+    override fun resendSignup(userName: String): AuthResult {
+        val result: AuthResult = AuthResult()
+
+        try {
+            val signUpResult = AWSMobileClient.getInstance().resendSignUp(
+                userName
             )
             if(signUpResult.confirmationState == false){
                 result.status = AuthStatus.SIGNED_UP_WAIT_FOR_CODE
@@ -172,7 +190,7 @@ class AwsAuthProvider() : BaseAuthProvider {
                     .invalidateTokens(invalidateTokens)
                     .build())
             result.status = AuthStatus.SIGNED_OUT
-            userName.postValue(Application.applicationContext().getString(R.string.auth_header_user_guest))
+            userName.postValue(Application.applicationContext().getString(R.string.auth_guest_user))
         }
         catch(e: Exception){
             Log.w(mLogTag, "Error: " + e.message)
@@ -181,6 +199,48 @@ class AwsAuthProvider() : BaseAuthProvider {
         }
         finally {
             this.currentUserState.postValue(result.status)
+            return result
+        }
+    }
+
+    override fun forgotPassword(userName: String): ForgotPasswordResult {
+        var result: ForgotPasswordResult = ForgotPasswordResult()
+
+        try {
+            val forgotPasswordResult = AWSMobileClient.getInstance().forgotPassword(userName)
+            when(forgotPasswordResult.state){
+                ForgotPasswordState.CONFIRMATION_CODE -> result.status = ForgotPasswordStatus.CONFIRM
+                ForgotPasswordState.DONE -> result.status = ForgotPasswordStatus.DONE
+            else-> result.status = ForgotPasswordStatus.UNKNOWN
+            }
+        }
+        catch(e: Exception){
+            Log.w(mLogTag, "Error: " + e.message)
+            result.status = ForgotPasswordStatus.ERROR
+        }
+        finally {
+            this.forgotPasswordState.postValue(result.status)
+            return result
+        }
+    }
+
+    override fun confirmForgotPassword(userName: String, code: String): ForgotPasswordResult {
+        var result: ForgotPasswordResult = ForgotPasswordResult()
+
+        try {
+            val forgotPasswordResult = AWSMobileClient.getInstance().confirmForgotPassword(userName, code)
+            when(forgotPasswordResult.state){
+                ForgotPasswordState.CONFIRMATION_CODE -> result.status = ForgotPasswordStatus.CONFIRM
+                ForgotPasswordState.DONE -> result.status = ForgotPasswordStatus.DONE
+                else-> result.status = ForgotPasswordStatus.UNKNOWN
+            }
+        }
+        catch(e: Exception){
+            Log.w(mLogTag, "Error: " + e.message)
+            result.status = ForgotPasswordStatus.ERROR
+        }
+        finally {
+            this.forgotPasswordState.postValue(result.status)
             return result
         }
     }

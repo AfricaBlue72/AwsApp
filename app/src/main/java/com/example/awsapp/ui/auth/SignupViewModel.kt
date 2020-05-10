@@ -1,12 +1,10 @@
 package com.example.awsapp.ui.auth
 
-import android.app.Application
 import android.content.Context
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
 import com.example.awsapp.R
-import com.example.awsapp.providers.AuthStatus
-import com.example.awsapp.providers.BaseAuthProvider
+import com.example.awsapp.authproviders.AuthStatus
+import com.example.awsapp.authproviders.BaseAuthProvider
 import com.example.awsapp.util.APP_TAG
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

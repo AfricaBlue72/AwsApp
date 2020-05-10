@@ -13,15 +13,15 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.awsapp.R
-import com.example.awsapp.providers.AuthStatus
+import com.example.awsapp.authproviders.AuthStatus
 import com.example.awsapp.util.APP_TAG
-import com.example.awsapp.util.InjectorUtils
+import com.example.awsapp.authproviders.AuthInjectorUtils
 import kotlinx.android.synthetic.main.auth_signin.*
 
 class SigninFragment : Fragment(), FlowDialog.VerifyCodeDialogListener {
     val mLogTag = APP_TAG + this::class.java.simpleName
     private val viewModel: SigninViewModel by viewModels{
-        InjectorUtils.provideSigninViewModelFactory(requireContext())
+        AuthInjectorUtils.provideSigninViewModelFactory(requireContext())
     }
 
     override fun onCreateView(

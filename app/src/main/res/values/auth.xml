@@ -22,8 +22,10 @@
     <string name="auth_mfa_submit">Submit</string>
     <string name="auth_mfa_cancel_submit">Cancel</string>
     <string name="auth_forgot_password">Forgot password</string>
+    <string name="auth_forgot_password_submit">Submit</string>
     <string name="auth_new_password">New password</string>
     <string name="auth_resend_code">Resend code</string>
+
     <string name="auth_verification_code">Enter code</string>
     <string name="auth_verification_code_ok">Confirm</string>
     <string name="auth_verification_code_cancel">Cancel</string>
@@ -33,12 +35,18 @@
     <string name="auth_message_signin_nok">Login was not successful</string>
     <string name="auth_message_signup_ok">Sign up is successful</string>
     <string name="auth_message_signup_nok">Sign up was not successful</string>
+    <string name="auth_message_signup_resend_ok">Resend for signup up is successful</string>
+    <string name="auth_message_signup_resend_nok">Resend for signup up was not successful</string>
     <string name="auth_message_signout_ok">Logout is successful</string>
     <string name="auth_message_signout_nok">Logout was not successful</string>
     <string name="auth_message_confirm_code_ok">Code confirmation was successful</string>
     <string name="auth_message_confirm_code_nok">Code confirmation was not successful</string>
+    <string name="auth_message_forgot_password_ok">Forgot password was successful</string>
+    <string name="auth_message_forgot_password_nok">Forgot password was not successful</string>
 
-    <string name="auth_header_user_guest">Guest</string>
+
+    <string name="auth_guest_user">Guest</string>
+
 
     <string name="auth_menu_sign_out">Log out</string>
     <string name="auth_menu_sign_in">Login</string>

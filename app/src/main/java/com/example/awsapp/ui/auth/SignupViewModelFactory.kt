@@ -1,10 +1,9 @@
 package com.example.awsapp.ui.auth
 
-import android.app.Application
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.awsapp.providers.BaseAuthProvider
+import com.example.awsapp.authproviders.BaseAuthProvider
 
 class SignupViewModelFactory(
     private val context: Context,

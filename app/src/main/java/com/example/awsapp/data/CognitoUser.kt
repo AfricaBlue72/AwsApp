@@ -2,7 +2,7 @@ package com.example.awsapp.data
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.awsapp.providers.AuthStatus
+import com.example.awsapp.authproviders.AuthStatus
 
 @Entity
 data class CognitoUser(

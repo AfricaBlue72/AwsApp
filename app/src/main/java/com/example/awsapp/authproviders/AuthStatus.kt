@@ -1,4 +1,4 @@
-package com.example.awsapp.providers
+package com.example.awsapp.authproviders
 
 enum class AuthStatus(value: Int){
     ERROR(-2),

@@ -11,19 +11,27 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.example.awsapp.R
-import com.example.awsapp.providers.AuthStatus
+import com.example.awsapp.authproviders.AuthStatus
+import com.example.awsapp.authproviders.AuthInjectorUtils
 
 
 class FlowDialog(forAuthStatus: AuthStatus, listener: VerifyCodeDialogListener) : DialogFragment() {
     internal var listener = listener
     internal val forAuthStatus = forAuthStatus
+
+    private val viewModel: FlowDialogViewModel by viewModels{
+        AuthInjectorUtils.provideFlowDialogViewModelFactory(requireContext())
+    }
 
     interface VerifyCodeDialogListener {
         fun onDialogPositiveClick(forAuthStatus: AuthStatus, mfaCode: String)
@@ -35,7 +43,7 @@ class FlowDialog(forAuthStatus: AuthStatus, listener: VerifyCodeDialogListener) 
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val root = inflater.inflate(R.layout.auth_mfa_dialog, container, false)
+        val root = inflater.inflate(R.layout.auth_flow_dialog, container, false)
 
         if(forAuthStatus == AuthStatus.NEW_PASSWORD_REQUIRED){
             val header = root.findViewById<TextView>(R.id.textViewHeader)
@@ -43,6 +51,16 @@ class FlowDialog(forAuthStatus: AuthStatus, listener: VerifyCodeDialogListener) 
 
             val editCode = root.findViewById<EditText>(R.id.editTextCode)
             editCode.setHint(R.string.auth_verification_code_hint)
+        }
+
+
+        val buttonUser = root.findViewById<Button>(R.id.buttonUser)
+        val editTextUser = root.findViewById<EditText>(R.id.editTextUser)
+        buttonUser.text = viewModel.userName.value
+        editTextUser.setText(viewModel.userName.value)
+        buttonUser.setOnClickListener(){
+            editTextUser.isVisible = true
+            buttonUser.isVisible = false
         }
 
         return root
@@ -55,7 +73,7 @@ class FlowDialog(forAuthStatus: AuthStatus, listener: VerifyCodeDialogListener) 
             // Build the dialog and set up the button click handlers
             val builder = AlertDialog.Builder(it)
             val inflater = requireActivity().layoutInflater;
-            val view = inflater.inflate(R.layout.auth_mfa_dialog, null)
+            val view = inflater.inflate(R.layout.auth_flow_dialog, null)
 
             when(forAuthStatus) {
                 AuthStatus.NEW_PASSWORD_REQUIRED -> {
@@ -69,6 +87,20 @@ class FlowDialog(forAuthStatus: AuthStatus, listener: VerifyCodeDialogListener) 
                 else ->{
                     hideResendButton(view)
                 }
+            }
+
+            val buttonUser = view.findViewById<Button>(R.id.buttonUser)
+            val editTextUser = view.findViewById<EditText>(R.id.editTextUser)
+            buttonUser.text = viewModel.userName.value
+            editTextUser.setText(viewModel.userName.value)
+            buttonUser.setOnClickListener(){
+                editTextUser.visibility = View.VISIBLE
+                buttonUser.visibility = View.INVISIBLE
+            }
+
+            val resendButton = view.findViewById<Button>(R.id.buttonResendCode)
+            resendButton.setOnClickListener {
+                viewModel.resendSignup(editTextUser.text.toString())
             }
 
             val submitButton = view.findViewById<Button>(R.id.buttonSubmit)
@@ -86,6 +118,21 @@ class FlowDialog(forAuthStatus: AuthStatus, listener: VerifyCodeDialogListener) 
 
             val editCode = view.findViewById<EditText>(R.id.editTextCode)
             editCode.requestFocus()
+
+            viewModel.isBusy.observe(viewLifecycleOwner, Observer {
+                if(it != null && it == true) {
+                    submitButton.isEnabled = false
+                    resendButton.isEnabled = false
+                    buttonUser.isEnabled = false
+                    view.findViewById<ProgressBar>(R.id.progressBar).visibility = View.VISIBLE
+                }
+                if(it != null && it == false) {
+                    submitButton.isEnabled = true
+                    resendButton.isEnabled = true
+                    buttonUser.isEnabled = true
+                    view.findViewById<ProgressBar>(R.id.progressBar).visibility = View.INVISIBLE
+                }
+            })
 
             builder.setView(view)
             val dialog = builder.create()

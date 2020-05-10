@@ -1,6 +1,4 @@
-package com.example.awsapp.providers
-
-import android.content.Context
+package com.example.awsapp.authproviders
 
 object ProviderInjector {
 
