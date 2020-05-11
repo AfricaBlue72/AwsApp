@@ -91,4 +91,8 @@
         android:name="com.example.awsapp.ui.auth.ForgotPasswordFragment"
         android:label="@string/auth_forgot_password" />
     <action android:id="@+id/action_global_forgotPasswordFragment" app:destination="@id/nav_forgot_password" />
+    <fragment
+        android:id="@+id/nav_view_tokens"
+        android:name="com.example.awsapp.ui.auth.ViewTokensFragment"
+        android:label="ViewTokensFragment" />
 </navigation>

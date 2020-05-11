@@ -90,20 +90,16 @@ class SigninFragment : Fragment(), FlowDialog.VerifyCodeDialogListener {
         return root
     }
 
-    override fun onDialogPositiveClick(forAuthStatus: AuthStatus, mfaCode: String) {
+    override fun onDialogPositiveClick(forAuthStatus: AuthStatus, code: String, password: String) {
         when(forAuthStatus) {
             AuthStatus.NEW_PASSWORD_REQUIRED -> {
-                //TODO Initiate new password
-//                public void confirmSignIn(new password,
-//                    Callback<SignInResult> callback)
+                viewModel.confirmSignin(password)
             }
             AuthStatus.SIGNED_UP_WAIT_FOR_CODE -> {
-                //TODO Initiate sending new verification code
+                viewModel.confirmSignup(editUsername.text.toString(), code)
             }
             AuthStatus.SIGNED_IN_WAIT_FOR_CODE -> {
-                //TODO Initiate sending MFA
-//                public void confirmSignIn(mfa code,
-//                    Callback<SignInResult> callback)
+                viewModel.confirmSignin(code)
             }
         }
     }

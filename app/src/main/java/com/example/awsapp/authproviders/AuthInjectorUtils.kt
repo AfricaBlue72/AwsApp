@@ -48,5 +48,9 @@ object AuthInjectorUtils {
         return ForgotPasswordViewModelFactory(context, getAwsAuthRepository())
     }
 
+    fun provideViewTokensViewModelFactory(context: Context): ViewTokensViewModelFactory
+    {
+        return ViewTokensViewModelFactory(context, getAwsAuthRepository())
+    }
 
 }

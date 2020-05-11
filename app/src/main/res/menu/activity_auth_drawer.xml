@@ -6,7 +6,6 @@
             android:title="@string/auth_menu_sign_in" />
         <item
             android:id="@+id/nav_sign_out"
-            android:icon="@drawable/ic_stop_black_24dp"
             android:title="@string/auth_menu_sign_out" />
         <item
             android:id="@+id/nav_change_password"
@@ -14,5 +13,9 @@
         <item
             android:id="@+id/nav_forgot_password"
             android:title="@string/auth_menu_forgot_password" />
+        <item
+            android:id="@+id/nav_view_tokens"
+            android:title="@string/auth_menu_view_tokens" />
+
     </group>
 </menu>

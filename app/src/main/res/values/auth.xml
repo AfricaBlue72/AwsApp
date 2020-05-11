@@ -43,6 +43,8 @@
     <string name="auth_message_confirm_code_nok">Code confirmation was not successful</string>
     <string name="auth_message_forgot_password_ok">Forgot password was successful</string>
     <string name="auth_message_forgot_password_nok">Forgot password was not successful</string>
+    <string name="auth_message_get_tokens_ok">Get tokens successful</string>
+    <string name="auth_message_get_tokens_nok">Get tokens not successful</string>
 
 
     <string name="auth_guest_user">Guest</string>
@@ -52,5 +54,16 @@
     <string name="auth_menu_sign_in">Login</string>
     <string name="auth_menu_forgot_password">Forgot password</string>
     <string name="auth_menu_change_password">Change password</string>
+    <string name="auth_menu_view_tokens">View tokens</string>
+
+    <string name="auth_token_openid">Open Id</string>
+    <string name="auth_token_access">Access</string>
+    <string name="auth_token_refresh">Refresh</string>
+
+    <string-array name="auth_token_types">
+        <item>@string/auth_token_openid</item>
+        <item>@string/auth_token_access</item>
+        <item>@string/auth_token_refresh</item>
+    </string-array>
 
 </resources>

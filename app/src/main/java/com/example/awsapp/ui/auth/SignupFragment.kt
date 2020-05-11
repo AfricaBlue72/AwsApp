@@ -83,10 +83,10 @@ class SignupFragment : Fragment() , FlowDialog.VerifyCodeDialogListener{
         }
         return root
     }
-    override fun onDialogPositiveClick(forAuthStatus: AuthStatus, mfaCode: String) {
+    override fun onDialogPositiveClick(forAuthStatus: AuthStatus, code: String, password: String) {
         when(forAuthStatus) {
             AuthStatus.SIGNED_UP_WAIT_FOR_CODE -> {
-                viewModel.confirmSignup(mfaCode)
+                viewModel.confirmSignup(code)
             }
         }
     }

@@ -10,6 +10,7 @@ import com.amazonaws.mobile.client.SignOutOptions
 import com.amazonaws.mobile.client.UserState
 import com.amazonaws.mobile.client.results.ForgotPasswordState
 import com.amazonaws.mobile.client.results.SignInState
+import com.amazonaws.mobile.client.results.Tokens
 import com.amazonaws.services.cognitoidentityprovider.model.PasswordResetRequiredException
 import com.amazonaws.services.cognitoidentityprovider.model.UserNotConfirmedException
 import com.example.awsapp.lifecycle.Application
@@ -53,6 +54,10 @@ class AwsAuthProvider() : BaseAuthProvider {
     private fun updateState(){
         updateCurrentUserState()
         updateUserName()
+    }
+
+    override fun getTokens(): Tokens? {
+        return AWSMobileClient.getInstance().getTokens()
     }
 
     override fun signup(userName: String,
@@ -180,6 +185,46 @@ class AwsAuthProvider() : BaseAuthProvider {
         }
     }
 
+    override fun confirmSignin( signInChallengeResponse: String): AuthResult{
+        val result: AuthResult = AuthResult()
+
+        try {
+            val signInResult = AWSMobileClient.getInstance().confirmSignIn(
+                signInChallengeResponse
+            )
+            when(signInResult.signInState){
+                SignInState.NEW_PASSWORD_REQUIRED -> {
+                    result.status = AuthStatus.NEW_PASSWORD_REQUIRED
+                }
+                SignInState.DONE -> {
+                    result.status = AuthStatus.SIGNED_IN
+                }
+                SignInState.SMS_MFA -> {
+                    result.status = AuthStatus.SIGNED_IN_WAIT_FOR_CODE
+                }
+            }
+            result.providerResult = signInResult
+        }
+        catch (e: UserNotConfirmedException){
+            Log.w(mLogTag, "Error: " + e.message)
+            result.status = AuthStatus.SIGNED_UP_WAIT_FOR_CODE
+            result.message = e.message
+        }
+        catch (e: PasswordResetRequiredException){
+            Log.w(mLogTag, "Error: " + e.message)
+            result.status = AuthStatus.NEW_PASSWORD_REQUIRED
+            result.message = e.message
+        }
+        catch(e: Exception){
+            Log.w(mLogTag, "Error: " + e.message)
+            result.status = AuthStatus.ERROR
+            result.message = e.message
+        }
+        finally {
+            this.currentUserState.postValue(result.status)
+            return result
+        }
+    }
     override fun signout(signOutGlobally: Boolean, invalidateTokens: Boolean): AuthResult{
         val result: AuthResult = AuthResult()
 
@@ -225,11 +270,11 @@ class AwsAuthProvider() : BaseAuthProvider {
         }
     }
 
-    override fun confirmForgotPassword(userName: String, code: String): AuthResult {
+    override fun confirmForgotPassword(password: String, code: String): AuthResult {
         val result: AuthResult = AuthResult()
 
         try {
-            val forgotPasswordResult = AWSMobileClient.getInstance().confirmForgotPassword(userName, code)
+            val forgotPasswordResult = AWSMobileClient.getInstance().confirmForgotPassword(password, code)
             when(forgotPasswordResult.state){
                 ForgotPasswordState.CONFIRMATION_CODE -> result.forgotPasswordStatus = ForgotPasswordStatus.CONFIRM
                 ForgotPasswordState.DONE -> result.forgotPasswordStatus = ForgotPasswordStatus.DONE

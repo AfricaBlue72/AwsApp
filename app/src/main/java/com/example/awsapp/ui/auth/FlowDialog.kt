@@ -20,21 +20,24 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
 import com.example.awsapp.R
 import com.example.awsapp.authproviders.AuthStatus
 import com.example.awsapp.authproviders.AuthInjectorUtils
 
 
-class FlowDialog(forAuthStatus: AuthStatus, listener: VerifyCodeDialogListener) : DialogFragment() {
-    internal var listener = listener
-    internal val forAuthStatus = forAuthStatus
+class FlowDialog(var forAuthStatus: AuthStatus,
+                 val listener: VerifyCodeDialogListener,
+                 val currentUserName: String? = null) : DialogFragment() {
+//    internal var listener = listener
+//    internal val forAuthStatus = forAuthStatus
 
     private val viewModel: FlowDialogViewModel by viewModels{
         AuthInjectorUtils.provideFlowDialogViewModelFactory(requireContext())
     }
 
     interface VerifyCodeDialogListener {
-        fun onDialogPositiveClick(forAuthStatus: AuthStatus, mfaCode: String)
+        fun onDialogPositiveClick(forAuthStatus: AuthStatus, code: String, password: String)
         fun onDialogNegativeClick()
     }
 
@@ -69,24 +72,28 @@ class FlowDialog(forAuthStatus: AuthStatus, listener: VerifyCodeDialogListener) 
                 AuthStatus.NEW_PASSWORD_REQUIRED -> {
                     setupForNewPassword(view)
                     hideResendButton(view)
+                    hideCodeInput(view)
                 }
                 AuthStatus.SIGNED_UP_WAIT_FOR_CODE -> {
-                    val resendButton = view.findViewById<Button>(R.id.buttonResendCode)
-                    resendButton.isVisible = true
+                    hidePasswordInput(view)
+                }
+                AuthStatus.FORGOT_PASSWORD_CODE -> {
+                    hideResendButton(view)
                 }
                 else ->{
+                    hidePasswordInput(view)
                     hideResendButton(view)
                 }
             }
 
             val buttonUser = view.findViewById<Button>(R.id.buttonUser)
             val editTextUser = view.findViewById<EditText>(R.id.editTextUser)
-            buttonUser.text = viewModel.userName.value
-            editTextUser.setText(viewModel.userName.value)
-            buttonUser.setOnClickListener(){
-                editTextUser.visibility = View.VISIBLE
-                buttonUser.visibility = View.INVISIBLE
-            }
+            buttonUser.text = currentUserName ?: viewModel.userName.value
+            editTextUser.setText(currentUserName ?: viewModel.userName.value)
+//            buttonUser.setOnClickListener(){
+//                editTextUser.visibility = View.VISIBLE
+//                buttonUser.visibility = View.INVISIBLE
+//            }
 
             val resendButton = view.findViewById<Button>(R.id.buttonResendCode)
             resendButton.setOnClickListener {
@@ -96,7 +103,8 @@ class FlowDialog(forAuthStatus: AuthStatus, listener: VerifyCodeDialogListener) 
             val submitButton = view.findViewById<Button>(R.id.buttonSubmit)
             submitButton.setOnClickListener{
                 val code = view.findViewById<EditText>(R.id.editTextCode).text.toString()
-                listener.onDialogPositiveClick(forAuthStatus, code)
+                val password = view.findViewById<EditText>(R.id.editTextPassword).text.toString()
+                listener.onDialogPositiveClick(forAuthStatus, code, password)
                 dismiss()
             }
 
@@ -109,7 +117,7 @@ class FlowDialog(forAuthStatus: AuthStatus, listener: VerifyCodeDialogListener) 
             val editCode = view.findViewById<EditText>(R.id.editTextCode)
             editCode.requestFocus()
 
-            viewModel.isBusy.observe(viewLifecycleOwner, Observer {
+            viewModel.isBusy.observe(this, Observer {
                 if(it != null && it == true) {
                     submitButton.isEnabled = false
                     resendButton.isEnabled = false
@@ -137,22 +145,55 @@ class FlowDialog(forAuthStatus: AuthStatus, listener: VerifyCodeDialogListener) 
         val header = view.findViewById<TextView>(R.id.textViewHeader)
         header.setText(R.string.auth_new_password)
 
-        val editCode = view.findViewById<EditText>(R.id.editTextCode)
-        editCode.setHint(R.string.auth_new_password_hint)
-        editCode.inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD
-        editCode.setTransformationMethod(PasswordTransformationMethod.getInstance());
+        val editPassword = view.findViewById<EditText>(R.id.editTextPassword)
+        editPassword.setHint(R.string.auth_new_password_hint)
     }
 
     private fun hideResendButton(view: View) {
         val resendButton = view.findViewById<Button>(R.id.buttonResendCode)
-        resendButton.isVisible = true
+        resendButton.isVisible = false
+        resendButton.isEnabled = false
         val constraintLayout = view.findViewById<ConstraintLayout>(R.id.frameLayoutForFlow)
         val constraintSet = ConstraintSet()
         constraintSet.clone(constraintLayout)
         constraintSet.connect(
             R.id.divider,
             ConstraintSet.TOP,
+            R.id.divider3,
+            ConstraintSet.BOTTOM,
+            0
+        )
+        constraintSet.applyTo(constraintLayout)
+    }
+
+    private fun hidePasswordInput(view: View){
+        val editTextPassword = view.findViewById<EditText>(R.id.editTextPassword)
+        editTextPassword.isVisible = false
+        editTextPassword.isEnabled = false
+        val constraintLayout = view.findViewById<ConstraintLayout>(R.id.frameLayoutForFlow)
+        val constraintSet = ConstraintSet()
+        constraintSet.clone(constraintLayout)
+        constraintSet.connect(
             R.id.editTextCode,
+            ConstraintSet.TOP,
+            R.id.textViewHeader,
+            ConstraintSet.BOTTOM,
+            8
+        )
+        constraintSet.applyTo(constraintLayout)
+    }
+
+    private fun hideCodeInput(view: View){
+        val editTextCode = view.findViewById<EditText>(R.id.editTextCode)
+        editTextCode.isVisible = false
+        editTextCode.isEnabled = false
+        val constraintLayout = view.findViewById<ConstraintLayout>(R.id.frameLayoutForFlow)
+        val constraintSet = ConstraintSet()
+        constraintSet.clone(constraintLayout)
+        constraintSet.connect(
+            R.id.divider3,
+            ConstraintSet.TOP,
+            R.id.editTextPassword,
             ConstraintSet.BOTTOM,
             8
         )

@@ -32,7 +32,7 @@ class ForgotPasswordFragment: Fragment(), FlowDialog.VerifyCodeDialogListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val root = inflater.inflate(R.layout.auth_confirm_code, container, false)
+        val root = inflater.inflate(R.layout.auth_forgot_password, container, false)
 
         val buttonSubmit = root.findViewById<Button>(R.id.buttonSubmit)
         val editUser = root.findViewById<EditText>(R.id.editTextUser)
@@ -55,7 +55,9 @@ class ForgotPasswordFragment: Fragment(), FlowDialog.VerifyCodeDialogListener {
                 when(it){
                    ForgotPasswordStatus.CONFIRM -> {
                        val dialog =
-                           FlowDialog(AuthStatus.FORGOT_PASSWORD_CODE, this@ForgotPasswordFragment)
+                           FlowDialog(AuthStatus.FORGOT_PASSWORD_CODE,
+                               this@ForgotPasswordFragment,
+                               editUser.text.toString())
                        dialog.show(childFragmentManager, null)
                    }
                     ForgotPasswordStatus.DONE -> {
@@ -75,9 +77,9 @@ class ForgotPasswordFragment: Fragment(), FlowDialog.VerifyCodeDialogListener {
         return root
     }
 
-    override fun onDialogPositiveClick(forAuthStatus: AuthStatus, code: String) {
+    override fun onDialogPositiveClick(forAuthStatus: AuthStatus, code: String, password:String) {
         if(userName != null) {
-            viewModel.confirmForgotPassword(userName!!, code)
+            viewModel.confirmForgotPassword(password, code)
         }
     }
 

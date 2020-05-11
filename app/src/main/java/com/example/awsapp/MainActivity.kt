@@ -103,6 +103,7 @@ class MainActivity : AppCompatActivity() {
                     navView.menu.findItem(R.id.nav_sign_out).setVisible(true)
                     navView.menu.findItem(R.id.nav_change_password).setVisible(true)
                     navView.menu.findItem(R.id.nav_forgot_password).setVisible(false)
+                    navView.menu.findItem(R.id.nav_view_tokens).setVisible(true)
                 }
                 else
                 {
@@ -110,6 +111,7 @@ class MainActivity : AppCompatActivity() {
                     navView.menu.findItem(R.id.nav_sign_out).setVisible(false)
                     navView.menu.findItem(R.id.nav_change_password).setVisible(false)
                     navView.menu.findItem(R.id.nav_forgot_password).setVisible(true)
+                    navView.menu.findItem(R.id.nav_view_tokens).setVisible(false)
                 }
 
             } else {

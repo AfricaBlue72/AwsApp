@@ -46,9 +46,9 @@ class ForgotPasswordViewModel (context: Context, authProvider: BaseAuthProvider)
         }
     }
 
-    private suspend fun _confirmForgotPassword(userName: String, code: String) = withContext(Dispatchers.IO){
+    private suspend fun _confirmForgotPassword(password: String, code: String) = withContext(Dispatchers.IO){
 
-        val result = authProvider.confirmForgotPassword(userName, code)
+        val result = authProvider.confirmForgotPassword(password, code)
 
         if(result.forgotPasswordStatus == ForgotPasswordStatus.ERROR || result.forgotPasswordStatus == ForgotPasswordStatus.UNKNOWN){
             feedback.postValue( context.applicationContext.getString(R.string.auth_message_forgot_password_nok) )
