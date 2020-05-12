@@ -94,5 +94,5 @@
     <fragment
         android:id="@+id/nav_view_tokens"
         android:name="com.example.awsapp.ui.auth.ViewTokensFragment"
-        android:label="ViewTokensFragment" />
+        android:label="@string/auth_view_tokens_fragment" />
 </navigation>

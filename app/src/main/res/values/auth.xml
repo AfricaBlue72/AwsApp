@@ -4,6 +4,7 @@
     <string name="auth_signup_fragment">Create account</string>
     <string name="auth_signout_fragment">Logout</string>
     <string name="auth_confirm_code_fragment">Confirm code</string>
+    <string name="auth_view_tokens_fragment">View tokens</string>
 
     <string name="auth_username_hint">User name</string>
     <string name="auth_email_hint">Email</string>
@@ -59,11 +60,16 @@
     <string name="auth_token_openid">Open Id</string>
     <string name="auth_token_access">Access</string>
     <string name="auth_token_refresh">Refresh</string>
+    <string name="auth_token_expiry_label">Expiry</string>
+    <string name="auth_token_issued_date_label">Issued date</string>
+    <string name="auth_token_issued_at_label">Issued at date</string>
+    <string name="auth_token_token_header_label">Token header</string>
+    <string name="auth_token_token_body_label">Token body</string>
 
     <string-array name="auth_token_types">
         <item>@string/auth_token_openid</item>
         <item>@string/auth_token_access</item>
-        <item>@string/auth_token_refresh</item>
+<!--        <item>@string/auth_token_refresh</item>-->
     </string-array>
 
 </resources>

@@ -46,15 +46,14 @@
                     android:id="@+id/textViewExpiryLabel"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:text="Expiry" />
+                    android:text="@string/auth_token_expiry_label" />
 
                 <TextView
                     android:id="@+id/textViewExpiryContent"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:paddingStart="8dp"
-                    android:text="Expiry content" />
+                    android:paddingStart="8dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -73,15 +72,14 @@
                     android:id="@+id/textViewIssuedLabel"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:text="Issued date" />
+                    android:text="@string/auth_token_issued_date_label" />
 
                 <TextView
                     android:id="@+id/textViewIssuedContent"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:paddingStart="8dp"
-                    android:text="Issued date content" />
+                    android:paddingStart="8dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -100,15 +98,14 @@
                     android:id="@+id/textViewIssuedAtLabel"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:text="Issued at" />
+                    android:text="@string/auth_token_issued_at_label" />
 
                 <TextView
                     android:id="@+id/textViewIssuedAtContent"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:paddingStart="8dp"
-                    android:text="Issued at content" />
+                    android:paddingStart="8dp" />
             </LinearLayout>
 
 <!--            <LinearLayout-->
@@ -154,15 +151,14 @@
                     android:id="@+id/textViewTokenHeaderLabel"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:text="Token header" />
+                    android:text="@string/auth_token_token_header_label" />
 
                 <TextView
                     android:id="@+id/textViewTokenHeaderContent"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:paddingStart="8dp"
-                    android:text="Token header content" />
+                    android:paddingStart="8dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -181,15 +177,14 @@
                     android:id="@+id/textViewTokenBodyLabel"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:text="Token body" />
+                    android:text="@string/auth_token_token_body_label" />
 
                 <TextView
                     android:id="@+id/textViewTokenBodyContent"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:paddingStart="8dp"
-                    android:text="Token body content" />
+                    android:paddingStart="8dp" />
             </LinearLayout>
 
             <View

@@ -19,7 +19,8 @@ class AwsAuthProvider() : BaseAuthProvider {
     val mLogTag = APP_TAG + this::class.java.simpleName
 
     override val userName = MutableLiveData<String>().apply {
-        value = Application.applicationContext().getString(R.string.auth_guest_user)
+        //value = Application.applicationContext().getString(R.string.auth_guest_user)
+        value = AWSMobileClient.getInstance().username
     }
     override val currentUserState = MutableLiveData<AuthStatus>().apply {
         value = AuthStatus.UNKNOWN

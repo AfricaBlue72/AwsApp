@@ -19,7 +19,7 @@ import com.example.awsapp.util.APP_TAG
 import java.util.*
 
 
-class ViewTokensFragment : Fragment(), AdapterView.OnItemSelectedListener {
+class ViewTokensFragment : Fragment() {
     // Use this instance of the interface to deliver action events
     val mLogTag = APP_TAG + this::class.java.simpleName
     private val viewModel: ViewTokensViewModel by viewModels{
@@ -62,11 +62,10 @@ class ViewTokensFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
         spinner.onItemSelectedListener = object : OnItemSelectedListener {
             override fun onItemSelected(
-                parent: AdapterView<*>, view: View,
+                parent: AdapterView<*>, view: View?,
                 position: Int, id: Long
             ) {
-                val toto = parent.getItemAtPosition(position)
-                when (toto){
+                when (parent.getItemAtPosition(position)){
                     getString(R.string.auth_token_openid) -> FillContent(root, currentTokens?.idToken)
                     getString(R.string.auth_token_access) -> FillContent(root, currentTokens?.accessToken)
                     getString(R.string.auth_token_refresh) -> FillContent(root, currentTokens?.refreshToken)
@@ -106,22 +105,5 @@ class ViewTokensFragment : Fragment(), AdapterView.OnItemSelectedListener {
         catch(e: Exception){
             Log.e(mLogTag, "Error: " + e.message)
         }
-    }
-
-    @ExperimentalStdlibApi
-    override fun onItemSelected(parent: AdapterView<*>, view: View, pos: Int, id: Long) {
-        // An item was selected. You can retrieve the selected item using
-        // parent.getItemAtPosition(pos)
-        val toto = parent.getItemAtPosition(pos)
-        when (toto){
-            getString(R.string.auth_token_openid) -> FillContent(view, currentTokens?.idToken)
-            getString(R.string.auth_token_access) -> FillContent(view, currentTokens?.accessToken)
-            getString(R.string.auth_token_refresh) -> FillContent(view, currentTokens?.refreshToken)
-
-        }
-    }
-
-    override fun onNothingSelected(parent: AdapterView<*>) {
-        // Another interface callback
     }
 }
