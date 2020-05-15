@@ -214,8 +214,6 @@ Resources:
         -   ALLOW_REFRESH_TOKEN_AUTH
       WriteAttributes:
         -   email
-      AllowedOAuthScopes:
-        -   email
       # -   custom:FirstName
       # -   custom:LastName
       # -   custom:Age
@@ -330,8 +328,6 @@ Resources:
                 -   Effect: Allow
                     Action:
                       -   mobileanalytics:PutEvents
-                      -   cognito-sync:*
-                      -   cognito-identity:*
                     Resource: '*'
 
   IdentityPoolRoleAttachment:

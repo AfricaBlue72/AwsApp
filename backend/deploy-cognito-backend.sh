@@ -23,7 +23,7 @@ echo "##########################################################################
 
 if(${deploy})
 then
-    echo 'Creating the identity-pool'
+    echo 'Creating the stack'
     cfn-create-or-update --stack-name cognito-backend --template-body file://cognito-backend.yaml \
     --capabilities CAPABILITY_NAMED_IAM \
     --region ${REGION} --wait
@@ -31,7 +31,7 @@ fi
 
 if(${delete})
 then
-    echo 'Delete identity-pool'
+    echo 'Delete the stack'
     aws cloudformation delete-stack --stack-name cognito-backend || continue
     aws cloudformation wait stack-delete-complete --stack-name cognito-backend
 fi
