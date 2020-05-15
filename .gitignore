@@ -4,7 +4,7 @@
 *.aab
 
 # Cognito details
-*/awsconfiguration.json
+/app/src/main/res/raw/awsconfiguration.json
 
 
 # Files for the ART/Dalvik VM
