@@ -24,6 +24,7 @@ import androidx.lifecycle.observe
 import com.example.awsapp.R
 import com.example.awsapp.authproviders.AuthStatus
 import com.example.awsapp.authproviders.AuthInjectorUtils
+import com.google.android.material.textfield.TextInputLayout
 
 
 class FlowDialog(var forAuthStatus: AuthStatus,
@@ -40,24 +41,6 @@ class FlowDialog(var forAuthStatus: AuthStatus,
         fun onDialogPositiveClick(forAuthStatus: AuthStatus, code: String, password: String)
         fun onDialogNegativeClick()
     }
-
-//    override fun onCreateView(
-//        inflater: LayoutInflater,
-//        container: ViewGroup?,
-//        savedInstanceState: Bundle?
-//    ): View? {
-//        val root = inflater.inflate(R.layout.auth_flow_dialog, container, false)
-//
-//        if(forAuthStatus == AuthStatus.NEW_PASSWORD_REQUIRED){
-//            val header = root.findViewById<TextView>(R.id.textViewHeader)
-//            header.setText(R.string.auth_new_password)
-//
-//            val editCode = root.findViewById<EditText>(R.id.editTextCode)
-//            editCode.setHint(R.string.auth_verification_code_hint)
-//        }
-//
-//        return root
-//    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         super.onCreateDialog(savedInstanceState)
@@ -87,23 +70,19 @@ class FlowDialog(var forAuthStatus: AuthStatus,
             }
 
             val buttonUser = view.findViewById<Button>(R.id.buttonUser)
-            val editTextUser = view.findViewById<EditText>(R.id.editTextUser)
+            val editTextUser = view.findViewById<TextInputLayout>(R.id.editTextUser)
             buttonUser.text = currentUserName ?: viewModel.userName.value
-            editTextUser.setText(currentUserName ?: viewModel.userName.value)
-//            buttonUser.setOnClickListener(){
-//                editTextUser.visibility = View.VISIBLE
-//                buttonUser.visibility = View.INVISIBLE
-//            }
+            editTextUser.editText?.setText(currentUserName ?: viewModel.userName.value)
 
             val resendButton = view.findViewById<Button>(R.id.buttonResendCode)
             resendButton.setOnClickListener {
-                viewModel.resendSignup(editTextUser.text.toString())
+                viewModel.resendSignup(editTextUser.editText?.text.toString())
             }
 
             val submitButton = view.findViewById<Button>(R.id.buttonSubmit)
             submitButton.setOnClickListener{
-                val code = view.findViewById<EditText>(R.id.editTextCode).text.toString()
-                val password = view.findViewById<EditText>(R.id.editTextPassword).text.toString()
+                val code = view.findViewById<TextInputLayout>(R.id.editTextCode).editText?.text.toString()
+                val password = view.findViewById<TextInputLayout>(R.id.editTextPassword).editText?.text.toString()
                 listener.onDialogPositiveClick(forAuthStatus, code, password)
                 dismiss()
             }
@@ -114,7 +93,7 @@ class FlowDialog(var forAuthStatus: AuthStatus,
                 dismiss()
             }
 
-            val editCode = view.findViewById<EditText>(R.id.editTextCode)
+            val editCode = view.findViewById<TextInputLayout>(R.id.editTextCode)
             editCode.requestFocus()
 
             viewModel.isBusy.observe(this, Observer {
@@ -145,8 +124,8 @@ class FlowDialog(var forAuthStatus: AuthStatus,
         val header = view.findViewById<TextView>(R.id.textViewHeader)
         header.setText(R.string.auth_new_password)
 
-        val editPassword = view.findViewById<EditText>(R.id.editTextPassword)
-        editPassword.setHint(R.string.auth_new_password_hint)
+        val editPassword = view.findViewById<TextInputLayout>(R.id.editTextPassword)
+        editPassword.hint = getString(R.string.auth_new_password_hint)
     }
 
     private fun hideResendButton(view: View) {

@@ -57,17 +57,11 @@
     <fragment
         android:id="@+id/nav_sign_up"
         android:name="com.example.awsapp.ui.auth.SignupFragment"
-        android:label="@string/auth_signup_fragment" >
-        <action
-            android:id="@+id/action_nav_sign_up_to_confirmCodeFragment"
-            app:destination="@id/nav_confirm_code"
-            app:popUpTo="@id/nav_sign_in"
-            app:popUpToInclusive="true" />
-    </fragment>
+        android:label="@string/auth_signup_fragment" />
     <fragment
-        android:id="@+id/nav_confirm_code"
-        android:name="com.example.awsapp.ui.auth.ConfirmCodeFragment"
-        android:label="@string/auth_confirm_code_fragment" >
+        android:id="@+id/nav_change_password"
+        android:name="com.example.awsapp.ui.auth.ChangePasswordFragment"
+        android:label="@string/auth_change_password_fragment" >
         <argument
             android:name="userName"
             app:argType="string"
@@ -80,7 +74,7 @@
     </fragment>
     <action android:id="@+id/action_global_nav_sign_in" app:destination="@id/nav_sign_in" />
     <action android:id="@+id/action_global_nav_sign_up" app:destination="@id/nav_sign_up" />
-    <action android:id="@+id/action_global_confirmCodeFragment" app:destination="@id/nav_confirm_code" />
+    <action android:id="@+id/action_global_confirmCodeFragment" app:destination="@id/nav_change_password" />
     <fragment
         android:id="@+id/nav_sign_out"
         android:name="com.example.awsapp.ui.auth.SignoutFragment"

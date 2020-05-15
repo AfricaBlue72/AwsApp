@@ -27,16 +27,16 @@ class Application : android.app.Application()  {
     override fun onCreate() {
         super.onCreate()
 
-        AWSMobileClient.getInstance().initialize(applicationContext, object :
-            Callback<UserStateDetails> {
-            override fun onResult(result: UserStateDetails?) {
-                Log.i(mLogTag, "onResult: " + result?.userState)
-            }
-
-            override fun onError(e: Exception?) {
-                Log.e(mLogTag, "Initialization error.", e)
-            }
-        })
+//        AWSMobileClient.getInstance().initialize(applicationContext, object :
+//            Callback<UserStateDetails> {
+//            override fun onResult(result: UserStateDetails?) {
+//                Log.i(mLogTag, "onResult: " + result?.userState)
+//            }
+//
+//            override fun onError(e: Exception?) {
+//                Log.e(mLogTag, "Initialization error.", e)
+//            }
+//        })
     }
 
     fun getAppContext(): Context? {

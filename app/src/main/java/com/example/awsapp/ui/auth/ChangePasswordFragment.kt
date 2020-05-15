@@ -13,20 +13,20 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.example.awsapp.R
 import com.example.awsapp.authproviders.AuthStatus
 import com.example.awsapp.util.APP_TAG
 import com.example.awsapp.authproviders.AuthInjectorUtils
-import kotlinx.android.synthetic.main.auth_confirm_code.*
+import com.example.awsapp.authproviders.ChangePasswordStatus
+import com.google.android.material.textfield.TextInputLayout
+import kotlinx.android.synthetic.main.auth_change_password.*
 
-class ConfirmCodeFragment: Fragment() {
+class ChangePasswordFragment: Fragment() {
     // Use this instance of the interface to deliver action events
     val mLogTag = APP_TAG + this::class.java.simpleName
-    private val viewModel: ConfirmCodeViewModel by viewModels{
-        AuthInjectorUtils.provideConfirmCodeViewModelFactory(requireContext())
+    private val viewModel: ChangePasswordViewModel by viewModels{
+        AuthInjectorUtils.provideChangePasswordViewModelFactory(requireContext())
     }
-    private val args: ConfirmCodeFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,24 +34,23 @@ class ConfirmCodeFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val root = inflater.inflate(R.layout.auth_confirm_code, container, false)
+        val root = inflater.inflate(R.layout.auth_change_password, container, false)
 
-        val editTextUserNameForCode = root.findViewById<EditText>(R.id.editTextUserName)
-        editTextUserNameForCode.setText(args.userName)
+        root.findViewById<TextInputLayout>(R.id.editTextOldPassword).requestFocus()
 
-        viewModel.authStatus.observe(viewLifecycleOwner, Observer{
-            if(it != null && it == AuthStatus.SIGNED_UP){
-                findNavController().popBackStack(R.id.nav_sign_in, true)
+        viewModel.changePasswordStatus.observe(viewLifecycleOwner, Observer{
+            if(it != null && it == ChangePasswordStatus.DONE){
+                findNavController().popBackStack()
             }
         })
 
         viewModel.isBusy.observe(viewLifecycleOwner, Observer {
             if(it != null && it == true) {
-                root.findViewById<Button>(R.id.buttonConfirmCodeOk).isEnabled = false
+                root.findViewById<Button>(R.id.buttonChangePassword).isEnabled = false
                 root.findViewById<ProgressBar>(R.id.progressBar).visibility = View.VISIBLE
             }
             if(it != null && it == false) {
-                root.findViewById<Button>(R.id.buttonConfirmCodeOk).isEnabled = true
+                root.findViewById<Button>(R.id.buttonChangePassword).isEnabled = true
                 root.findViewById<ProgressBar>(R.id.progressBar).visibility = View.INVISIBLE
             }
         })
@@ -62,11 +61,11 @@ class ConfirmCodeFragment: Fragment() {
             toast.show()
         })
 
-        root.findViewById<Button>(R.id.buttonConfirmCodeOk).apply{
+        root.findViewById<Button>(R.id.buttonChangePassword).apply{
             setOnClickListener{
-                viewModel.confirmSignup(
-                    editTextUserName.text.toString(),
-                    editTextVerificationCode.text.toString())
+                viewModel.changePassword(
+                    editTextOldPassword.editText?.text.toString(),
+                    editTextNewPassword.editText?.text.toString())
             }
         }
 

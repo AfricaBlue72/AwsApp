@@ -2,12 +2,10 @@ package com.example.awsapp.authproviders
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.amazonaws.mobile.client.AWSMobileClient
+import com.amazonaws.mobile.client.*
 import com.example.awsapp.R
 import com.example.awsapp.util.APP_TAG
 import java.lang.Exception
-import com.amazonaws.mobile.client.SignOutOptions
-import com.amazonaws.mobile.client.UserState
 import com.amazonaws.mobile.client.results.ForgotPasswordState
 import com.amazonaws.mobile.client.results.SignInState
 import com.amazonaws.mobile.client.results.Tokens
@@ -15,7 +13,7 @@ import com.amazonaws.services.cognitoidentityprovider.model.PasswordResetRequire
 import com.amazonaws.services.cognitoidentityprovider.model.UserNotConfirmedException
 import com.example.awsapp.lifecycle.Application
 
-class AwsAuthProvider() : BaseAuthProvider {
+object AwsAuthProvider : BaseAuthProvider {
     val mLogTag = APP_TAG + this::class.java.simpleName
 
     override val userName = MutableLiveData<String>().apply {
@@ -27,10 +25,23 @@ class AwsAuthProvider() : BaseAuthProvider {
     }
     override val forgotPasswordState = MutableLiveData<ForgotPasswordStatus>().apply{
         value = ForgotPasswordStatus.UNKNOWN
-}
+    }
+    override val changePasswordState = MutableLiveData<ChangePasswordStatus>().apply{
+        value = ChangePasswordStatus.UNKNOWN
+    }
 
     init{
-        updateState()
+        AWSMobileClient.getInstance().initialize(Application.applicationContext(), object :
+            Callback<UserStateDetails> {
+            override fun onResult(result: UserStateDetails?) {
+                Log.i(mLogTag, "onResult: " + result?.userState)
+                updateState()
+            }
+
+            override fun onError(e: Exception?) {
+                Log.e(mLogTag, "Initialization error.", e)
+            }
+        })
     }
 
     private fun updateCurrentUserState() {
@@ -46,7 +57,7 @@ class AwsAuthProvider() : BaseAuthProvider {
         currentUserState.postValue(result)
     }
 
-    private fun updateUserName() {
+    override fun updateUserName() {
         val name = AWSMobileClient.getInstance().username ?:
                 Application.applicationContext().getString(R.string.auth_guest_user)
         userName.postValue(name)
@@ -205,6 +216,7 @@ class AwsAuthProvider() : BaseAuthProvider {
                 }
             }
             result.providerResult = signInResult
+            updateUserName()
         }
         catch (e: UserNotConfirmedException){
             Log.w(mLogTag, "Error: " + e.message)
@@ -260,6 +272,7 @@ class AwsAuthProvider() : BaseAuthProvider {
             else-> result.forgotPasswordStatus = ForgotPasswordStatus.UNKNOWN
             }
             result.providerResult = forgotPasswordResult
+            updateUserName()
         }
         catch(e: Exception){
             Log.w(mLogTag, "Error: " + e.message)
@@ -282,6 +295,7 @@ class AwsAuthProvider() : BaseAuthProvider {
                 else-> result.forgotPasswordStatus = ForgotPasswordStatus.UNKNOWN
             }
             result.providerResult = forgotPasswordResult
+            updateUserName()
         }
         catch(e: Exception){
             Log.w(mLogTag, "Error: " + e.message)
@@ -294,14 +308,33 @@ class AwsAuthProvider() : BaseAuthProvider {
         }
     }
 
-    companion object {
+    override fun changePassword(oldPassword: String, newPassword: String): AuthResult {
+        val result: AuthResult = AuthResult()
 
-        // For Singleton instantiation
-        @Volatile private var instance: AwsAuthProvider? = null
-
-        fun getInstance() =
-            instance ?: synchronized(this) {
-                instance ?: AwsAuthProvider().also { instance = it }
-            }
+        try {
+            AWSMobileClient.getInstance().changePassword(oldPassword, newPassword)
+            result.changePasswordStatus = ChangePasswordStatus.DONE
+            updateUserName()
+        }
+        catch(e: Exception){
+            Log.w(mLogTag, "Error: " + e.message)
+            result.message = e.message
+            result.changePasswordStatus = ChangePasswordStatus.ERROR
+        }
+        finally {
+            this.changePasswordState.postValue(result.changePasswordStatus)
+            return result
+        }
     }
+
+//    companion object {
+//
+//        // For Singleton instantiation
+//        @Volatile private var instance: AwsAuthProvider? = null
+//
+//        fun getInstance() =
+//            instance ?: synchronized(this) {
+//                instance ?: AwsAuthProvider().also { instance = it }
+//            }
+//    }
 }

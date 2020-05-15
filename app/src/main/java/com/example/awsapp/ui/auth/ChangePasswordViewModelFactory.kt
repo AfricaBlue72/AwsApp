@@ -5,13 +5,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.awsapp.authproviders.BaseAuthProvider
 
-class ConfirmCodeViewModelFactory(
+class ChangePasswordViewModelFactory(
     private val context: Context,
     private val authProvider: BaseAuthProvider
 ) : ViewModelProvider.NewInstanceFactory() {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return ConfirmCodeViewModel(context, authProvider) as T
+        return ChangePasswordViewModel(context, authProvider) as T
     }
 }

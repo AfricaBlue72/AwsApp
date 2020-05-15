@@ -20,6 +20,7 @@ abstract class BaseAuthViewModel(context: Context, authProvider: BaseAuthProvide
     val userName = authProvider.userName
     val authStatus = authProvider.currentUserState
     val forgotPasswordStatus = authProvider.forgotPasswordState
+    val changePasswordStatus = authProvider.changePasswordState
 
 //    protected val authProvider: AwsAuthProvider
 //        get() {

@@ -68,8 +68,8 @@ class SigninFragment : Fragment(), FlowDialog.VerifyCodeDialogListener {
         root.findViewById<Button>(R.id.buttonSignin).apply{
             setOnClickListener {
                 viewModel.signin(
-                    editUsername.text.toString(),
-                    editPassword.text.toString()
+                    editUsername.editText?.text.toString(),
+                    editPassword.editText?.text.toString()
                 )
             }
 
@@ -96,7 +96,7 @@ class SigninFragment : Fragment(), FlowDialog.VerifyCodeDialogListener {
                 viewModel.confirmSignin(password)
             }
             AuthStatus.SIGNED_UP_WAIT_FOR_CODE -> {
-                viewModel.confirmSignup(editUsername.text.toString(), code)
+                viewModel.confirmSignup(editUsername.editText?.text.toString(), code)
             }
             AuthStatus.SIGNED_IN_WAIT_FOR_CODE -> {
                 viewModel.confirmSignin(code)

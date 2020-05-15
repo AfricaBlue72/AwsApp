@@ -18,6 +18,7 @@ import com.example.awsapp.authproviders.AuthInjectorUtils
 import com.example.awsapp.authproviders.AuthStatus
 import com.example.awsapp.authproviders.ForgotPasswordStatus
 import com.example.awsapp.util.APP_TAG
+import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.auth_forgot_password.*
 
 class ForgotPasswordFragment: Fragment(), FlowDialog.VerifyCodeDialogListener {
@@ -35,7 +36,7 @@ class ForgotPasswordFragment: Fragment(), FlowDialog.VerifyCodeDialogListener {
         val root = inflater.inflate(R.layout.auth_forgot_password, container, false)
 
         val buttonSubmit = root.findViewById<Button>(R.id.buttonSubmit)
-        val editUser = root.findViewById<EditText>(R.id.editTextUser)
+        val editUser = root.findViewById<TextInputLayout>(R.id.editTextUser)
 
         viewModel.isBusy.observe(viewLifecycleOwner, Observer {
             if(it != null && it == true) {
@@ -57,7 +58,7 @@ class ForgotPasswordFragment: Fragment(), FlowDialog.VerifyCodeDialogListener {
                        val dialog =
                            FlowDialog(AuthStatus.FORGOT_PASSWORD_CODE,
                                this@ForgotPasswordFragment,
-                               editUser.text.toString())
+                               editUser.editText?.text.toString())
                        dialog.show(childFragmentManager, null)
                    }
                     ForgotPasswordStatus.DONE -> {
@@ -69,7 +70,7 @@ class ForgotPasswordFragment: Fragment(), FlowDialog.VerifyCodeDialogListener {
         })
 
         buttonSubmit.setOnClickListener {
-            userName = editTextUser.text.toString()
+            userName = editTextUser.editText?.text.toString()
             if(userName != null) {
                 viewModel.forgotPassword(userName!!)
             }
@@ -87,5 +88,6 @@ class ForgotPasswordFragment: Fragment(), FlowDialog.VerifyCodeDialogListener {
         val toast = Toast.makeText(getActivity()?.getApplicationContext(), "Rather Not", Toast.LENGTH_LONG)
         toast.setGravity(Gravity.TOP, 8, 8)
         toast.show()
+        viewModel.forgotPasswordStatus.value = ForgotPasswordStatus.DONE
     }
 }

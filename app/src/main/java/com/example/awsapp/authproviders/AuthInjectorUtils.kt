@@ -7,13 +7,6 @@ object AuthInjectorUtils {
     private fun getAwsAuthRepository(): BaseAuthProvider{
         return ProviderInjector.getAwsAuthProvider()
     }
-
-    fun provideConfirmCodeViewModelFactory (context: Context): ConfirmCodeViewModelFactory
-    {
-        return ConfirmCodeViewModelFactory(context,
-            getAwsAuthRepository()
-        )
-    }
     fun provideSigninViewModelFactory (context: Context): SigninViewModelFactory
     {
         return SigninViewModelFactory(context,
@@ -52,5 +45,10 @@ object AuthInjectorUtils {
     {
         return ViewTokensViewModelFactory(context, getAwsAuthRepository())
     }
-
+    fun provideChangePasswordViewModelFactory (context: Context): ChangePasswordViewModelFactory
+    {
+        return ChangePasswordViewModelFactory(context,
+            getAwsAuthRepository()
+        )
+    }
 }

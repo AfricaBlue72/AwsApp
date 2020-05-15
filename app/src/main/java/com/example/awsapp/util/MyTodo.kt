@@ -12,3 +12,6 @@ class MyTodo {
         TODO("Take UserCodeDeliveryDetails into account during signup")
     }
 }
+
+//https://proandroiddev.com/build-a-whatsapp-clone-on-android-with-kotlin-part-1-89de0abf12f7
+//https://getstream.io/tutorials/android-chat/#kotlin

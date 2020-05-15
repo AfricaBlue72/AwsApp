@@ -7,6 +7,9 @@ interface  BaseAuthProvider {
     val userName: MutableLiveData<String>
     val currentUserState: MutableLiveData<AuthStatus>
     val forgotPasswordState: MutableLiveData<ForgotPasswordStatus>
+    val changePasswordState: MutableLiveData<ChangePasswordStatus>
+
+    fun updateUserName()
 
     fun getTokens(): Tokens?
 
@@ -27,4 +30,6 @@ interface  BaseAuthProvider {
     fun forgotPassword(userName: String): AuthResult
 
     fun confirmForgotPassword(userName: String, code: String): AuthResult
+
+    fun changePassword(oldPassword: String, newPassword: String): AuthResult
 }

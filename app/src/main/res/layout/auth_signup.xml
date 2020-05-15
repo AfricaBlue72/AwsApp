@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/editUserName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -34,24 +34,41 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-            <EditText
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/editPassword"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:ems="10"
                 android:hint="@string/auth_password_hint"
-                android:inputType="textPassword"
+                app:endIconMode="password_toggle"
                 android:maxLength="128"
                 android:paddingHorizontal="8dp"
                 app:layout_constraintEnd_toEndOf="@+id/editUserName"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/editUserName"
-                app:layout_constraintTop_toBottomOf="@+id/editEmail" />
+                app:layout_constraintTop_toBottomOf="@+id/editEmail"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-            <EditText
+                <com.google.android.material.textfield.TextInputEditText
+                    android:inputType="textPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/editEmail"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -63,7 +80,15 @@
                 android:paddingHorizontal="8dp"
                 app:layout_constraintEnd_toEndOf="@+id/editUserName"
                 app:layout_constraintStart_toStartOf="@+id/editUserName"
-                app:layout_constraintTop_toBottomOf="@+id/editUserName" />
+                app:layout_constraintTop_toBottomOf="@+id/editUserName"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
             <Button
                 android:id="@+id/buttonSignup"
