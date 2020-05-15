@@ -1,0 +1,390 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: AWS CloudFormation template to launch resources for a cognito identity pool
+
+Parameters:
+  UserPoolName:
+    Description: The name of the userpool
+    Default: TestPool
+    Type: String
+    # AllowedPattern: [\w\s+=,.@-]+
+    MinLength: 1
+    MaxLength: 128
+
+  IdentityPoolName:
+    Description: The name of the identity pool
+    Default: TestIdentityPool
+    Type: String
+    # AllowedPattern: [\w\s+=,.@-]+
+    MinLength: 1
+    MaxLength: 128
+
+  ClientName:
+    Description: The name of the client
+    Default: AwsApp
+    Type: String
+    # AllowedPattern: [\w\s+=,.@-]+
+    MinLength: 1
+    MaxLength: 128
+
+  EmailMessage:
+    Description: Email message on a admin invite
+    Default: '{username}; You are invited; please accept with code {####}'
+    Type: String
+    # AllowedPattern: [\p{L}\p{M}\p{S}\p{N}\p{P}\s*]*\{####\}[\p{L}\p{M}\p{S}\p{N}\p{P}\s*]*
+    MinLength: 6
+    MaxLength: 20000
+
+  EmailSubject:
+    Description: Subject of the email invite
+    Default: You are invited
+    Type: String
+    # AllowedPattern:  [\p{L}\p{M}\p{S}\p{N}\p{P}\s]+
+    MinLength: 1
+    MaxLength: 140
+
+  SMSMessage:
+    Description: SMS message for an invite
+    Default: '{username}; You are invited; please accept with code {####}.'
+    Type: String
+    AllowedPattern: '.*\{####\}.*'
+    MinLength: 6
+    MaxLength: 140
+
+  EmailVerificationMessage:
+    Description: Verification email after sign up
+    Default: '{username}; Please verify your signup with code {####}.'
+    Type: String
+    # AllowedPattern: [\p{L}\p{M}\p{S}\p{N}\p{P}\s*]*\{####\}[\p{L}\p{M}\p{S}\p{N}\p{P}\s*]*
+    MinLength: 6
+    MaxLength: 20000
+
+  EmailVerificationSubject:
+    Description: Subject of the email verifying sign up
+    Default: Signup verification
+    Type: String
+    # AllowedPattern:  [\p{L}\p{M}\p{S}\p{N}\p{P}\s]+
+    MinLength: 1
+    MaxLength: 140
+
+  SmsVerificationMessage:
+    Description: SMS verification message
+    Default: ' {username}; Please verify with {####}.'
+    Type: String
+    AllowedPattern: '.*\{####\}.*'
+    MinLength: 6
+    MaxLength: 140
+
+Resources:
+  UserPoolSMSRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: UserPoolSMSRole
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          -   Effect: Allow
+              Principal:
+                Service:
+                  -   cognito-idp.amazonaws.com
+              Action:
+                -   sts:AssumeRole
+      Path: "/"
+      Policies:
+        -   PolicyName: root
+            PolicyDocument:
+              Version: 2012-10-17
+              Statement:
+                -
+                  Effect: Allow
+                  Action:
+                    -   SNS:Publish
+                    -   SNS:SendSMSMessage
+                  Resource: "*"
+
+  UserPool:
+    Type: AWS::Cognito::UserPool
+    DependsOn: UserPoolSMSRole
+    Properties:
+      AccountRecoverySetting:
+        RecoveryMechanisms:
+          -   Name: verified_email
+              Priority: 1
+          -   Name: verified_phone_number
+              Priority: 2
+      AdminCreateUserConfig:
+        AllowAdminCreateUserOnly: False
+        InviteMessageTemplate:
+          EmailMessage: !Ref EmailMessage
+          EmailSubject: !Ref EmailSubject
+          SMSMessage: !Ref SMSMessage
+        UnusedAccountValidityDays: 1
+      # AliasAttributes:
+      # -   email
+      AutoVerifiedAttributes:
+        -   phone_number
+        -   email
+      DeviceConfiguration:
+        ChallengeRequiredOnNewDevice: True
+        DeviceOnlyRememberedOnUserPrompt: True
+      #  EmailConfiguration:
+      #     ConfigurationSet: String
+      #     EmailSendingAccount: String
+      #     From: String
+      #     ReplyToEmailAddress: String
+      #     SourceArn: String
+      EmailVerificationMessage: !Ref EmailVerificationMessage
+      EmailVerificationSubject: !Ref EmailVerificationSubject
+      EnabledMfas:
+        -   SMS_MFA
+      # LambdaConfig:
+      #     CreateAuthChallenge: Arn
+      #     CustomMessage: Arn
+      #     DefineAuthChallenge: Arn
+      #     PostAuthentication: Arn
+      #     PostConfirmation: Arn
+      #     PreAuthentication: Arn
+      #     PreSignUp: Arn
+      #     PreTokenGeneration: Arn
+      #     UserMigration: Arn
+      #     VerifyAuthChallengeResponse: Arn
+      MfaConfiguration: OPTIONAL
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 8
+          RequireLowercase: true
+          RequireUppercase: false
+          RequireSymbols: false
+          RequireNumbers: false
+      Schema:
+        -   Name: "email"
+            StringAttributeConstraints:
+              MinLength: "0"
+              MaxLength: "2048"
+            DeveloperOnlyAttribute: false
+            Required: true
+            AttributeDataType: "String"
+            Mutable: true
+      # -   Name: FirstName
+      #     StringAttributeConstraints:
+      #         MinLength: 0
+      #         MaxLength: 2048
+      #     DeveloperOnlyAttribute: false
+      #     Required: false
+      #     AttributeDataType: String
+      #     Mutable: true
+      # -   Name: LastName
+      #     StringAttributeConstraints:
+      #         MinLength: 0
+      #         MaxLength: 2048
+      #     DeveloperOnlyAttribute: false
+      #     Required: false
+      #     AttributeDataType: String
+      #     Mutable: true
+      # -   Name: Age
+      #     NumberAttributeConstraints:
+      #         MinValue: 0
+      #         MaxValue: 150
+      #     DeveloperOnlyAttribute: false
+      #     Required: false
+      #     AttributeDataType: Number
+      #     Mutable: true
+      # SmsAuthenticationMessage: String
+      SmsConfiguration:
+        ExternalId: !Ref AWS::AccountId
+        SnsCallerArn: !GetAtt UserPoolSMSRole.Arn
+      SmsVerificationMessage: !Ref SmsVerificationMessage
+      # UsernameAttributes:
+      # -   email
+      UsernameConfiguration:
+        CaseSensitive: False
+        # UserPoolAddOns:
+        #     AdvancedSecurityMode: OFF
+      UserPoolName: !Ref UserPoolName
+      UserPoolTags: {}
+        # VerificationMessageTemplate:
+        #     VerificationMessageTemplate
+
+  UserPoolClient1:
+    Type: AWS::Cognito::UserPoolClient
+    DependsOn: UserPool
+    Properties:
+      UserPoolId: !Ref UserPool
+      ExplicitAuthFlows:
+        -   ALLOW_USER_SRP_AUTH
+        -   ALLOW_REFRESH_TOKEN_AUTH
+      WriteAttributes:
+        -   email
+      AllowedOAuthScopes:
+        -   email
+      # -   custom:FirstName
+      # -   custom:LastName
+      # -   custom:Age
+      # ReadAttributes:
+      # -   custom:FirstName
+      # -   custom:LastName
+      # -   custom:Age
+      RefreshTokenValidity: 30
+      ClientName: !Sub ${ClientName}1
+      GenerateSecret: False
+
+  UserPoolClient2:
+    Type: AWS::Cognito::UserPoolClient
+    DependsOn: UserPool
+    Properties:
+      UserPoolId: !Ref UserPool
+      ExplicitAuthFlows:
+        -   ALLOW_USER_SRP_AUTH
+        -   ALLOW_REFRESH_TOKEN_AUTH
+      WriteAttributes:
+        -   email
+      # -   custom:FirstName
+      # -   custom:LastName
+      # -   custom:Age
+      # ReadAttributes:
+      # -   email
+      # -   custom:FirstName
+      # -   custom:LastName
+      # -   custom:Age
+      RefreshTokenValidity: 30
+      ClientName:  !Sub ${ClientName}2
+      GenerateSecret: True
+
+  IdentityPool:
+    Type: AWS::Cognito::IdentityPool
+    DependsOn:
+      -   UserPool
+      -   UserPoolClient1
+      -   UserPoolClient2
+    Properties:
+      AllowClassicFlow: False
+      AllowUnauthenticatedIdentities: False
+      # CognitoEvents: Json
+      CognitoIdentityProviders:
+        -     ClientId: !Ref UserPoolClient2
+              ProviderName: !GetAtt UserPool.ProviderName
+              ServerSideTokenCheck: True
+      # CognitoStreams:
+      #     CognitoStreams
+      # DeveloperProviderName: String
+      IdentityPoolName: !Ref IdentityPoolName
+      # OpenIdConnectProviderARNs:
+      # -   String
+      # PushSync:
+      #     PushSync
+      # SamlProviderARNs:
+      # -   String
+      # SupportedLoginProviders: Json
+
+  UnAuthenticatedRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          -   Effect: Allow
+              Principal:
+                Federated: cognito-identity.amazonaws.com
+              Action:
+                -   sts:AssumeRoleWithWebIdentity
+              Condition:
+                StringEquals:
+                  cognito-identity.amazonaws.com:aud: !Ref IdentityPool
+                ForAnyValue:StringLike:
+                  cognito-identity.amazonaws.com:amr: unauthenticated
+      Path: /
+      Policies:
+        -   PolicyName: root
+            PolicyDocument:
+              Version: 2012-10-17
+              Statement:
+                -   Effect: Allow
+                    Action:
+                      -   mobileanalytics:PutEvents
+                      -   cognito-sync:*
+                    Resource: '*'
+
+  AuthenticatedRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          -   Effect: Allow
+              Principal:
+                Federated: cognito-identity.amazonaws.com
+              Action:
+                -   sts:AssumeRoleWithWebIdentity
+              Condition:
+                StringEquals:
+                  cognito-identity.amazonaws.com:aud: !Ref IdentityPool
+                ForAnyValue:StringLike:
+                  cognito-identity.amazonaws.com:amr: authenticated
+      Path: /
+      ManagedPolicyArns:
+        -   arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        -   PolicyName: root
+            PolicyDocument:
+              Version: 2012-10-17
+              Statement:
+                -   Effect: Allow
+                    Action:
+                      -   mobileanalytics:PutEvents
+                      -   cognito-sync:*
+                      -   cognito-identity:*
+                    Resource: '*'
+
+  IdentityPoolRoleAttachment:
+    Type: AWS::Cognito::IdentityPoolRoleAttachment
+    Properties:
+      IdentityPoolId: !Ref IdentityPool
+      Roles:
+        "authenticated": !GetAtt AuthenticatedRole.Arn
+        "unauthenticated": !GetAtt UnAuthenticatedRole.Arn
+          # RoleMappings:
+          #     "userpool1":
+          #         IdentityProvider: !Ref UserPool
+          #         AmbiguousRoleResolution: Deny
+          #         Type: Rules
+          #         RulesConfiguration:
+          #             Rules:
+          #             -   Claim: "sub"
+          #                 MatchType: "Equals"
+          #                 RoleARN: !GetAtt AuthenticatedRole.Arn
+          #                 Value: "goodvalue"
+
+Outputs:
+  UserPoolIdOutput:
+    Value: !Ref UserPool
+    Export:
+      Name: !Sub ${UserPoolName}UserPoolId
+
+  UserPoolArnOutput:
+    Value: !GetAtt UserPool.Arn
+    Export:
+      Name: !Sub ${UserPoolName}UserPoolArn
+
+  ProviderNameOutput:
+    Value: !GetAtt UserPool.ProviderName
+    Export:
+      Name: !Sub ${UserPoolName}ProviderName
+
+  ProviderUrlOutput:
+    Value: !GetAtt UserPool.ProviderURL
+    Export:
+      Name:  !Sub ${UserPoolName}ProviderUrlOutput
+
+  ClientIdOutput1:
+    Value: !Ref UserPoolClient1
+    Export:
+      Name:  !Sub ${ClientName}ClientId1
+
+  ClientIdOutput2:
+    Value: !Ref UserPoolClient2
+    Export:
+      Name:  !Sub ${ClientName}ClientId2
+
+  IdentityPoolIdOutput:
+    Value: !Ref IdentityPool
+    Export:
+      Name:  !Sub ${IdentityPoolName}IdentityPoolId
