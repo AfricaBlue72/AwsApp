@@ -1,0 +1,21 @@
+{
+  "IdentityManager": {
+    "Default": {}
+  },
+  "CredentialsProvider": {
+    "CognitoIdentity": {
+      "Default": {
+        "PoolId": "Your AWS Cognito identity pool Id",
+        "Region": "Your AWS region"
+      }
+    }
+  },
+  "CognitoUserPool": {
+    "Default": {
+      "PoolId": "Your AWS Cognito User Pool Id",
+      "AppClientId": "App Id",
+      "AppClientSecret": "App Secret",
+      "Region": "Your AWS region"
+    }
+  }
+}
