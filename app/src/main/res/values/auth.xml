@@ -53,7 +53,7 @@
     <string name="auth_message_change_password_nok">Change password not successful</string>
 
 
-    <string name="auth_guest_user">Guest!!!!</string>
+    <string name="auth_guest_user">Guest</string>
 
 
     <string name="auth_menu_sign_out">Log out</string>
