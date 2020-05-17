@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="com.example.awsapp.ui.home.HomeFragment"
+        android:name="com.africablue.awsapp.ui.home.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home">
 
@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/nav_home_second"
-        android:name="com.example.awsapp.ui.home.HomeSecondFragment"
+        android:name="com.africablue.awsapp.ui.home.HomeSecondFragment"
         android:label="@string/home_second"
         tools:layout="@layout/fragment_home_second">
         <action
@@ -34,18 +34,18 @@
 
     <fragment
         android:id="@+id/nav_gallery"
-        android:name="com.example.awsapp.ui.gallery.GalleryFragment"
+        android:name="com.africablue.awsapp.ui.gallery.GalleryFragment"
         android:label="@string/menu_gallery"
         tools:layout="@layout/fragment_gallery" />
 
     <fragment
         android:id="@+id/nav_slideshow"
-        android:name="com.example.awsapp.ui.slideshow.SlideshowFragment"
+        android:name="com.africablue.awsapp.ui.slideshow.SlideshowFragment"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_slideshow" />
     <fragment
         android:id="@+id/nav_sign_in"
-        android:name="com.example.awsapp.ui.auth.SigninFragment"
+        android:name="com.africablue.awsapp.ui.auth.SigninFragment"
         android:label="@string/auth_signin_fragment" >
         <action
             android:id="@+id/action_signinFragment_to_signupFragment"
@@ -56,11 +56,11 @@
     </fragment>
     <fragment
         android:id="@+id/nav_sign_up"
-        android:name="com.example.awsapp.ui.auth.SignupFragment"
+        android:name="com.africablue.awsapp.ui.auth.SignupFragment"
         android:label="@string/auth_signup_fragment" />
     <fragment
         android:id="@+id/nav_change_password"
-        android:name="com.example.awsapp.ui.auth.ChangePasswordFragment"
+        android:name="com.africablue.awsapp.ui.auth.ChangePasswordFragment"
         android:label="@string/auth_change_password_fragment" >
         <argument
             android:name="userName"
@@ -77,16 +77,16 @@
     <action android:id="@+id/action_global_confirmCodeFragment" app:destination="@id/nav_change_password" />
     <fragment
         android:id="@+id/nav_sign_out"
-        android:name="com.example.awsapp.ui.auth.SignoutFragment"
+        android:name="com.africablue.awsapp.ui.auth.SignoutFragment"
         android:label="@string/auth_signout_fragment" />
     <action android:id="@+id/action_global_nav_sign_out" app:destination="@id/nav_sign_out" />
     <fragment
         android:id="@+id/nav_forgot_password"
-        android:name="com.example.awsapp.ui.auth.ForgotPasswordFragment"
+        android:name="com.africablue.awsapp.ui.auth.ForgotPasswordFragment"
         android:label="@string/auth_forgot_password" />
     <action android:id="@+id/action_global_forgotPasswordFragment" app:destination="@id/nav_forgot_password" />
     <fragment
         android:id="@+id/nav_view_tokens"
-        android:name="com.example.awsapp.ui.auth.ViewTokensFragment"
+        android:name="com.africablue.awsapp.ui.auth.ViewTokensFragment"
         android:label="@string/auth_view_tokens_fragment" />
 </navigation>
