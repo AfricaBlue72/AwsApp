@@ -1,5 +1,6 @@
 package com.example.awsapp.authproviders
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.amazonaws.mobile.client.*
@@ -9,12 +10,41 @@ import java.lang.Exception
 import com.amazonaws.mobile.client.results.ForgotPasswordState
 import com.amazonaws.mobile.client.results.SignInState
 import com.amazonaws.mobile.client.results.Tokens
+import com.amazonaws.mobile.config.AWSConfiguration
 import com.amazonaws.services.cognitoidentityprovider.model.PasswordResetRequiredException
 import com.amazonaws.services.cognitoidentityprovider.model.UserNotConfirmedException
 import com.example.awsapp.lifecycle.Application
 
 object AwsAuthProvider : BaseAuthProvider {
     val mLogTag = APP_TAG + this::class.java.simpleName
+    lateinit var context: Context
+    lateinit var awsConfig: AWSConfiguration
+
+//    companion object {
+//        // For Singleton instantiation
+//        @Volatile private var instance: AwsAuthProvider? = null
+//
+//        fun getInstance(context: Context, awsConfig: AWSConfiguration) =
+//            instance ?: synchronized(this) {
+//                instance ?: AwsAuthProvider(context, awsConfig).also { instance = it }
+//            }
+//    }
+
+    fun initialize(context: Context, awsConfig: AWSConfiguration){
+        this.context = context
+        this.awsConfig = awsConfig
+        AWSMobileClient.getInstance().initialize(this.context, this.awsConfig, object :
+            Callback<UserStateDetails> {
+            override fun onResult(result: UserStateDetails?) {
+                Log.i(mLogTag, "onResult: " + result?.userState)
+                updateState()
+            }
+
+            override fun onError(e: Exception?) {
+                Log.e(mLogTag, "Initialization error.", e)
+            }
+        })
+    }
 
     override val userName = MutableLiveData<String>().apply {
         //value = Application.applicationContext().getString(R.string.auth_guest_user)
@@ -28,20 +58,6 @@ object AwsAuthProvider : BaseAuthProvider {
     }
     override val changePasswordState = MutableLiveData<ChangePasswordStatus>().apply{
         value = ChangePasswordStatus.UNKNOWN
-    }
-
-    init{
-        AWSMobileClient.getInstance().initialize(Application.applicationContext(), object :
-            Callback<UserStateDetails> {
-            override fun onResult(result: UserStateDetails?) {
-                Log.i(mLogTag, "onResult: " + result?.userState)
-                updateState()
-            }
-
-            override fun onError(e: Exception?) {
-                Log.e(mLogTag, "Initialization error.", e)
-            }
-        })
     }
 
     private fun updateCurrentUserState() {
@@ -59,7 +75,7 @@ object AwsAuthProvider : BaseAuthProvider {
 
     override fun updateUserName() {
         val name = AWSMobileClient.getInstance().username ?:
-                Application.applicationContext().getString(R.string.auth_guest_user)
+                this.context.getString(R.string.auth_guest_user)
         userName.postValue(name)
     }
 
@@ -248,7 +264,7 @@ object AwsAuthProvider : BaseAuthProvider {
                     .invalidateTokens(invalidateTokens)
                     .build())
             result.status = AuthStatus.SIGNED_OUT
-            userName.postValue(Application.applicationContext().getString(R.string.auth_guest_user))
+            updateUserName()
         }
         catch(e: Exception){
             Log.w(mLogTag, "Error: " + e.message)
@@ -326,15 +342,4 @@ object AwsAuthProvider : BaseAuthProvider {
             return result
         }
     }
-
-//    companion object {
-//
-//        // For Singleton instantiation
-//        @Volatile private var instance: AwsAuthProvider? = null
-//
-//        fun getInstance() =
-//            instance ?: synchronized(this) {
-//                instance ?: AwsAuthProvider().also { instance = it }
-//            }
-//    }
 }

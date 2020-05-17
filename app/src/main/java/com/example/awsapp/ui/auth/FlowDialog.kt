@@ -146,7 +146,7 @@ class FlowDialog(var forAuthStatus: AuthStatus,
     }
 
     private fun hidePasswordInput(view: View){
-        val editTextPassword = view.findViewById<EditText>(R.id.editTextPassword)
+        val editTextPassword = view.findViewById<TextInputLayout>(R.id.editTextPassword)
         editTextPassword.isVisible = false
         editTextPassword.isEnabled = false
         val constraintLayout = view.findViewById<ConstraintLayout>(R.id.frameLayoutForFlow)
@@ -163,7 +163,7 @@ class FlowDialog(var forAuthStatus: AuthStatus,
     }
 
     private fun hideCodeInput(view: View){
-        val editTextCode = view.findViewById<EditText>(R.id.editTextCode)
+        val editTextCode = view.findViewById<TextInputLayout>(R.id.editTextCode)
         editTextCode.isVisible = false
         editTextCode.isEnabled = false
         val constraintLayout = view.findViewById<ConstraintLayout>(R.id.frameLayoutForFlow)

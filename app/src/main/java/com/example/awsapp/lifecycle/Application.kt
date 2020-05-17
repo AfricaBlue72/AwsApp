@@ -5,7 +5,10 @@ import android.util.Log
 import com.amazonaws.mobile.client.AWSMobileClient
 import com.amazonaws.mobile.client.Callback
 import com.amazonaws.mobile.client.UserStateDetails
+import com.amazonaws.mobile.config.AWSConfiguration
 import com.amplifyframework.core.Amplify
+import com.example.awsapp.authproviders.BaseAuthProvider
+import com.example.awsapp.authproviders.ProviderInjector
 import com.example.awsapp.util.APP_TAG
 
 
@@ -26,6 +29,8 @@ class Application : android.app.Application()  {
 
     override fun onCreate() {
         super.onCreate()
+        val awsConfig = AWSConfiguration(applicationContext)
+        ProviderInjector.getAwsAuthProvider().initialize(applicationContext,awsConfig)
 
 //        AWSMobileClient.getInstance().initialize(applicationContext, object :
 //            Callback<UserStateDetails> {
