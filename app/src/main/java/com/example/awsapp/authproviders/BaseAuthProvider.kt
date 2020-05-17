@@ -32,4 +32,6 @@ interface  BaseAuthProvider {
     fun confirmForgotPassword(userName: String, code: String): AuthResult
 
     fun changePassword(oldPassword: String, newPassword: String): AuthResult
+
+    fun refresh()
 }

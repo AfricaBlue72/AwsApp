@@ -40,6 +40,7 @@ class ChangePasswordFragment: Fragment() {
 
         viewModel.changePasswordStatus.observe(viewLifecycleOwner, Observer{
             if(it != null && it == ChangePasswordStatus.DONE){
+                viewModel.refresh()
                 findNavController().popBackStack()
             }
         })

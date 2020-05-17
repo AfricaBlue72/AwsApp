@@ -36,4 +36,19 @@ class ChangePasswordViewModel (context: Context, authProvider: BaseAuthProvider)
             feedback.postValue( context.getString(R.string.auth_message_change_password_ok) )
         }
     }
+
+    fun refresh(){
+        isBusy.value = true
+
+        viewModelScope.launch {
+            _refresh()
+            isBusy.postValue(false)
+        }
+    }
+
+    private suspend fun _refresh() = withContext(
+        Dispatchers.IO){
+
+        authProvider.refresh()
+    }
 }

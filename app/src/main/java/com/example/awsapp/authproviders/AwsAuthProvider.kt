@@ -70,6 +70,7 @@ object AwsAuthProvider : BaseAuthProvider {
             UserState.UNKNOWN -> AuthStatus.UNKNOWN
             else -> AuthStatus.UNKNOWN
         }
+        Log.i(mLogTag, "Current user state: " + result.toString())
         currentUserState.postValue(result)
     }
 
@@ -330,7 +331,6 @@ object AwsAuthProvider : BaseAuthProvider {
         try {
             AWSMobileClient.getInstance().changePassword(oldPassword, newPassword)
             result.changePasswordStatus = ChangePasswordStatus.DONE
-            updateUserName()
         }
         catch(e: Exception){
             Log.w(mLogTag, "Error: " + e.message)
@@ -340,6 +340,19 @@ object AwsAuthProvider : BaseAuthProvider {
         finally {
             this.changePasswordState.postValue(result.changePasswordStatus)
             return result
+        }
+    }
+
+    override fun refresh() {
+        try {
+            AWSMobileClient.getInstance().refresh()
+            updateUserName()
+            updateCurrentUserState()
+            this.changePasswordState.postValue(ChangePasswordStatus.UNKNOWN)
+            Log.i(mLogTag, "Refreshed user. ")
+        }
+        catch(e: Exception){
+            Log.w(mLogTag, "Error: " + e.message)
         }
     }
 }
