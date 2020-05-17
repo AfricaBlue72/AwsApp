@@ -13,15 +13,4 @@ class MainActivityViewModel (val authProvider: BaseAuthProvider): ViewModel(){
 
     val currentUserState = authProvider.currentUserState
     val userName = authProvider.userName
-
-    fun updateUserName() {
-        viewModelScope.launch {
-            _updateUserName()
-        }
-    }
-
-    private suspend fun _updateUserName() = withContext(Dispatchers.IO){
-        authProvider.getTokens()
-    }
-
 }

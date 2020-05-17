@@ -19,15 +19,17 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.africablue.awsapp.authproviders.AuthStatus
-import com.africablue.awsapp.authproviders.AuthInjectorUtils
+import com.africablue.awsapp.util.getViewModelFactory
 import com.google.android.material.navigation.NavigationView
 
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
+
+
     private val viewModel: MainActivityViewModel by viewModels{
-        AuthInjectorUtils.provideMainActivityViewModelFactory()
+        getViewModelFactory()
     }
     private var userState = AuthStatus.UNKNOWN
 

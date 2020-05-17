@@ -14,8 +14,8 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.africablue.awsapp.R
 import com.africablue.awsapp.util.APP_TAG
-import com.africablue.awsapp.authproviders.AuthInjectorUtils
 import com.africablue.awsapp.authproviders.ChangePasswordStatus
+import com.africablue.awsapp.util.getViewModelFactory
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.auth_change_password.*
 
@@ -23,8 +23,10 @@ class ChangePasswordFragment: Fragment() {
     // Use this instance of the interface to deliver action events
     val mLogTag = APP_TAG + this::class.java.simpleName
     private val viewModel: ChangePasswordViewModel by viewModels{
-        AuthInjectorUtils.provideChangePasswordViewModelFactory(requireContext())
+        getViewModelFactory()
     }
+
+    //private val viewModel by viewModels<AddEditTaskViewModel> { getViewModelFactory() }
 
     override fun onCreateView(
         inflater: LayoutInflater,

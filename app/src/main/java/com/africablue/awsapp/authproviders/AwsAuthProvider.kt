@@ -19,16 +19,6 @@ object AwsAuthProvider : BaseAuthProvider {
     lateinit var context: Context
     lateinit var awsConfig: AWSConfiguration
 
-//    companion object {
-//        // For Singleton instantiation
-//        @Volatile private var instance: AwsAuthProvider? = null
-//
-//        fun getInstance(context: Context, awsConfig: AWSConfiguration) =
-//            instance ?: synchronized(this) {
-//                instance ?: AwsAuthProvider(context, awsConfig).also { instance = it }
-//            }
-//    }
-
     fun initialize(context: Context, awsConfig: AWSConfiguration){
         this.context = context
         this.awsConfig = awsConfig

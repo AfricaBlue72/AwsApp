@@ -70,12 +70,12 @@ dependencies {
     implementation("com.amazonaws:aws-android-sdk-mobile-client:$aws_sdk_version@aar") {
         transitive = true
     }
-    implementation("com.amazonaws:aws-android-sdk-auth-userpools:$aws_sdk_version@aar") {
-        transitive = true
-    }
-    implementation("com.amazonaws:aws-android-sdk-auth-ui:$aws_sdk_version@aar") {
-        transitive = true
-    }
+//    implementation("com.amazonaws:aws-android-sdk-auth-userpools:$aws_sdk_version@aar") {
+//        transitive = true
+//    }
+//    implementation("com.amazonaws:aws-android-sdk-auth-ui:$aws_sdk_version@aar") {
+//        transitive = true
+//    }
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
