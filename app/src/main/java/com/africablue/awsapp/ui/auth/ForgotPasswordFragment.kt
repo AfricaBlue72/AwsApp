@@ -16,14 +16,14 @@ import com.africablue.awsapp.R
 import com.africablue.awsapp.authproviders.AuthStatus
 import com.africablue.awsapp.authproviders.ForgotPasswordStatus
 import com.africablue.awsapp.util.APP_TAG
-import com.africablue.awsapp.util.getViewModelFactory
+import com.africablue.awsapp.util.getViewModelFactoryForAuthRepo
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.auth_forgot_password.*
 
 class ForgotPasswordFragment: Fragment(), FlowDialog.VerifyCodeDialogListener {
     val mLogTag = APP_TAG + this::class.java.simpleName
     private val viewModel: ForgotPasswordViewModel by viewModels{
-        getViewModelFactory()
+        getViewModelFactoryForAuthRepo()
     }
     var userName: String? = null
 

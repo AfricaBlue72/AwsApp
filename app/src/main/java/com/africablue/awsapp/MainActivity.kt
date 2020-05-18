@@ -19,7 +19,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.africablue.awsapp.authproviders.AuthStatus
-import com.africablue.awsapp.util.getViewModelFactory
+import com.africablue.awsapp.util.getViewModelFactoryForAuthRepo
 import com.google.android.material.navigation.NavigationView
 
 
@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private val viewModel: MainActivityViewModel by viewModels{
-        getViewModelFactory()
+        getViewModelFactoryForAuthRepo()
     }
     private var userState = AuthStatus.UNKNOWN
 

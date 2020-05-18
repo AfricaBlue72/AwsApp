@@ -15,7 +15,7 @@ import com.amazonaws.mobile.client.results.Token
 import com.amazonaws.mobile.client.results.Tokens
 import com.africablue.awsapp.R
 import com.africablue.awsapp.util.APP_TAG
-import com.africablue.awsapp.util.getViewModelFactory
+import com.africablue.awsapp.util.getViewModelFactoryForAuthRepo
 import java.util.*
 
 
@@ -23,7 +23,7 @@ class ViewTokensFragment : Fragment() {
     // Use this instance of the interface to deliver action events
     val mLogTag = APP_TAG + this::class.java.simpleName
     private val viewModel: ViewTokensViewModel by viewModels{
-        getViewModelFactory()
+        getViewModelFactoryForAuthRepo()
     }
     private var currentTokens: Tokens? = null
 

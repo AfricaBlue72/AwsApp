@@ -12,12 +12,12 @@ import androidx.navigation.fragment.findNavController
 import com.africablue.awsapp.R
 import com.africablue.awsapp.authproviders.AuthStatus
 import com.africablue.awsapp.util.APP_TAG
-import com.africablue.awsapp.util.getViewModelFactory
+import com.africablue.awsapp.util.getViewModelFactoryForAuthRepo
 
 class SignoutFragment : Fragment() {
     val mLogTag = APP_TAG + this::class.java.simpleName
     private val viewModel: SignoutViewModel by viewModels{
-        getViewModelFactory()
+        getViewModelFactoryForAuthRepo()
     }
 
     override fun onCreateView(

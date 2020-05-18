@@ -17,7 +17,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.africablue.awsapp.R
 import com.africablue.awsapp.authproviders.AuthStatus
-import com.africablue.awsapp.util.getViewModelFactory
+import com.africablue.awsapp.util.getViewModelFactoryForAuthRepo
 import com.google.android.material.textfield.TextInputLayout
 
 
@@ -28,7 +28,7 @@ class FlowDialog(var forAuthStatus: AuthStatus,
 //    internal val forAuthStatus = forAuthStatus
 
     private val viewModel: FlowDialogViewModel by viewModels{
-        getViewModelFactory()
+        getViewModelFactoryForAuthRepo()
     }
 
     interface VerifyCodeDialogListener {
