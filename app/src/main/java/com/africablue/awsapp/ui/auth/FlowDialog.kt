@@ -115,7 +115,7 @@ class FlowDialog(var forAuthStatus: AuthStatus,
     }
 
     private fun setupForNewPassword(view: View) {
-        val header = view.findViewById<TextView>(R.id.textViewHeader)
+        val header = view.findViewById<TextView>(R.id.textViewSentMessageHeader)
         header.setText(R.string.auth_new_password)
 
         val editPassword = view.findViewById<TextInputLayout>(R.id.editTextPassword)
@@ -149,7 +149,7 @@ class FlowDialog(var forAuthStatus: AuthStatus,
         constraintSet.connect(
             R.id.editTextCode,
             ConstraintSet.TOP,
-            R.id.textViewHeader,
+            R.id.textViewSentMessageHeader,
             ConstraintSet.BOTTOM,
             8
         )
