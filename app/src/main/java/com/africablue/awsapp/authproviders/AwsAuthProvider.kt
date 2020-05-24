@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.amazonaws.mobile.client.*
 import com.africablue.awsapp.R
 import com.africablue.awsapp.util.APP_TAG
+import com.amazonaws.auth.AWSCredentials
 import java.lang.Exception
 import com.amazonaws.mobile.client.results.ForgotPasswordState
 import com.amazonaws.mobile.client.results.SignInState
@@ -343,5 +344,9 @@ object AwsAuthProvider : BaseAuthProvider {
         catch(e: Exception){
             Log.w(mLogTag, "Error: " + e.message)
         }
+    }
+
+    override fun getCredentials(): Any {
+        return AWSMobileClient.getInstance().credentials
     }
 }

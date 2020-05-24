@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="translate_chat_fragment">Translate</string>
+    <string name="translate_message_input_end_icon">Send</string>
+    <string name="translate_message_input_start_icon">Configure</string>
+
+    <string name="translate_language_Afrikaans">Afrikaans</string>
+    <string name="translate_language_Albanian">Albanian</string>
+    <string name="translate_language_Amharic">Amharic</string>
+    <string name="translate_language_Arabic">Arabic</string>
+    <string name="translate_language_Azerbaijani">Azerbaijani</string>
+    <string name="translate_language_Bengali">Bengali</string>
+    <string name="translate_language_Bosnian">Bosnian</string>
+    <string name="translate_language_Bulgarian">Bulgarian</string>
+    <string name="translate_language_Chinese_Simplified">Chinese (Simplified)</string>
+    <string name="translate_language_Chinese_Traditional">Chinese (Traditional)</string>
+    <string name="translate_language_Croatian">Croatian</string>
+    <string name="translate_language_Czech">Czech</string>
+    <string name="translate_language_Danish">Danish</string>
+    <string name="translate_language_Dari">Dari</string>
+    <string name="translate_language_Dutch">Dutch</string>
+    <string name="translate_language_English">English</string>
+    <string name="translate_language_Estonian">Estonian</string>
+    <string name="translate_language_Finnish">Finnish</string>
+    <string name="translate_language_French">French</string>
+    <string name="translate_language_French_Canada">French (Canada)</string>
+    <string name="translate_language_Georgian">Georgian</string>
+    <string name="translate_language_German">German</string>
+    <string name="translate_language_Greek">Greek</string>
+    <string name="translate_language_Hausa">Hausa</string>
+    <string name="translate_language_Hebrew">Hebrew</string>
+    <string name="translate_language_Hindi">Hindi</string>
+    <string name="translate_language_Hungarian">Hungarian</string>
+    <string name="translate_language_Indonesian">Indonesian</string>
+    <string name="translate_language_Italian">Italian</string>
+    <string name="translate_language_Japanese">Japanese</string>
+    <string name="translate_language_Korean">Korean</string>
+    <string name="translate_language_Latvian">Latvian</string>
+    <string name="translate_language_Malay">Malay</string>
+    <string name="translate_language_Norwegian">Norwegian</string>
+    <string name="translate_language_Persian">Persian</string>
+    <string name="translate_language_Pashto">Pashto</string>
+    <string name="translate_language_Polish">Polish</string>
+    <string name="translate_language_Portuguese">Portuguese</string>
+    <string name="translate_language_Romanian">Romanian</string>
+    <string name="translate_language_Russian">Russian</string>
+    <string name="translate_language_Serbian">Serbian</string>
+    <string name="translate_language_Slovak">Slovak</string>
+    <string name="translate_language_Slovenian">Slovenian</string>
+    <string name="translate_language_Somali">Somali</string>
+    <string name="translate_language_Spanish">Spanish</string>
+    <string name="translate_language_Spanish_mexico">Spanish (Mexico)</string>
+    <string name="translate_language_Swahili">Swahili</string>
+    <string name="translate_language_Swedish">Swedish</string>
+    <string name="translate_language_Tagalog">Tagalog</string>
+    <string name="translate_language_Tamil">Tamil</string>
+    <string name="translate_language_Thai">Thai</string>
+    <string name="translate_language_Turkish">Turkish</string>
+    <string name="translate_language_Ukrainian">Ukrainian</string>
+    <string name="translate_language_Urdu">Urdu</string>
+
+
+    <array name="af"><item>af</item><item>@string/translate_language_Afrikaans</item></array>
+    <array name="sq"><item>sq</item><item>@string/translate_language_Albanian</item></array>
+    <array name="am"><item>am</item><item>@string/translate_language_Amharic</item></array>
+    <array name="ar"><item>ar</item><item>@string/translate_language_Arabic</item></array>
+    <array name="az"><item>az</item><item>@string/translate_language_Azerbaijani</item></array>
+    <array name="bn"><item>bn</item><item>@string/translate_language_Bengali</item></array>
+    <array name="bs"><item>bs</item><item>@string/translate_language_Bosnian</item></array>
+    <array name="bg"><item>bg</item><item>@string/translate_language_Bulgarian</item></array>
+    <array name="zh"><item>zh</item><item>@string/translate_language_Chinese_Simplified</item></array>
+    <array name="zh_tw"><item>zh-TW</item><item>@string/translate_language_Chinese_Traditional</item></array>
+    <array name="hr"><item>hr</item><item>@string/translate_language_Croatian</item></array>
+    <array name="cs"><item>cs</item><item>@string/translate_language_Czech</item></array>
+    <array name="da"><item>da</item><item>@string/translate_language_Danish</item></array>
+    <array name="fa_af"><item>fa-AF</item><item>@string/translate_language_Dari</item></array>
+    <array name="nl"><item>nl</item><item>@string/translate_language_Dutch</item></array>
+    <array name="en"><item>en</item><item>@string/translate_language_English</item></array>
+    <array name="et"><item>et</item><item>@string/translate_language_Estonian</item></array>
+    <array name="fi"><item>fi</item><item>@string/translate_language_Finnish</item></array>
+    <array name="fr"><item>fr</item><item>@string/translate_language_French</item></array>
+    <array name="fr_ca"><item>fr-CA</item><item>@string/translate_language_French_Canada</item></array>
+    <array name="ka"><item>ka</item><item>@string/translate_language_Georgian</item></array>
+    <array name="de"><item>de</item><item>@string/translate_language_German</item></array>
+    <array name="el"><item>el</item><item>@string/translate_language_Greek</item></array>
+    <array name="ha"><item>ha</item><item>@string/translate_language_Hausa</item></array>
+    <array name="he"><item>he</item><item>@string/translate_language_Hebrew</item></array>
+    <array name="hi"><item>hi</item><item>@string/translate_language_Hindi</item></array>
+    <array name="hu"><item>hu</item><item>@string/translate_language_Hungarian</item></array>
+    <array name="id"><item>id</item><item>@string/translate_language_Indonesian</item></array>
+    <array name="it"><item>it</item><item>@string/translate_language_Italian</item></array>
+    <array name="ja"><item>ja</item><item>@string/translate_language_Japanese</item></array>
+    <array name="ko"><item>ko</item><item>@string/translate_language_Korean</item></array>
+    <array name="lv"><item>lv</item><item>@string/translate_language_Latvian</item></array>
+    <array name="ms"><item>ms</item><item>@string/translate_language_Malay</item></array>
+    <array name="no"><item>no</item><item>@string/translate_language_Norwegian</item></array>
+    <array name="fa"><item>fa</item><item>@string/translate_language_Persian</item></array>
+    <array name="ps"><item>ps</item><item>@string/translate_language_Pashto</item></array>
+    <array name="pl"><item>pl</item><item>@string/translate_language_Polish</item></array>
+    <array name="pt"><item>pt</item><item>@string/translate_language_Portuguese</item></array>
+    <array name="ro"><item>ro</item><item>@string/translate_language_Romanian</item></array>
+    <array name="ru"><item>ru</item><item>@string/translate_language_Russian</item></array>
+    <array name="sr"><item>sr</item><item>@string/translate_language_Serbian</item></array>
+    <array name="sk"><item>sk</item><item>@string/translate_language_Slovak</item></array>
+    <array name="sl"><item>sl</item><item>@string/translate_language_Slovenian</item></array>
+    <array name="so"><item>so</item><item>@string/translate_language_Somali</item></array>
+    <array name="es"><item>es</item><item>@string/translate_language_Spanish</item></array>
+    <array name="es_mx"><item>es-MX</item><item>@string/translate_language_Spanish_mexico</item></array>
+    <array name="sw"><item>sw</item><item>@string/translate_language_Swahili</item></array>
+    <array name="sv"><item>sv</item><item>@string/translate_language_Swedish</item></array>
+    <array name="tl"><item>tl</item><item>@string/translate_language_Tagalog</item></array>
+    <array name="ta"><item>ta</item><item>@string/translate_language_Tamil</item></array>
+    <array name="th"><item>th</item><item>@string/translate_language_Thai</item></array>
+    <array name="tr"><item>tr</item><item>@string/translate_language_Turkish</item></array>
+    <array name="uk"><item>uk</item><item>@string/translate_language_Ukrainian</item></array>
+    <array name="ur"><item>ur</item><item>@string/translate_language_Urdu</item></array>
+
+    <array name="countries_array_of_arrays">
+        <item>@array/af</item>
+        <item>@array/sq</item>
+        <item>@array/am</item>
+        <item>@array/ar</item>
+        <item>@array/az</item>
+        <item>@array/bn</item>
+        <item>@array/bs</item>
+        <item>@array/bg</item>
+        <item>@array/zh</item>
+        <item>@array/zh_tw</item>
+        <item>@array/hr</item>
+        <item>@array/cs</item>
+        <item>@array/da</item>
+        <item>@array/fa_af</item>
+        <item>@array/nl</item>
+        <item>@array/en</item>
+        <item>@array/et</item>
+        <item>@array/fi</item>
+        <item>@array/fr</item>
+        <item>@array/fr_ca</item>
+        <item>@array/ka</item>
+        <item>@array/de</item>
+        <item>@array/el</item>
+        <item>@array/ha</item>
+        <item>@array/he</item>
+        <item>@array/hi</item>
+        <item>@array/hu</item>
+        <item>@array/id</item>
+        <item>@array/it</item>
+        <item>@array/ja</item>
+        <item>@array/ko</item>
+        <item>@array/lv</item>
+        <item>@array/ms</item>
+        <item>@array/no</item>
+        <item>@array/fa</item>
+        <item>@array/ps</item>
+        <item>@array/pl</item>
+        <item>@array/pt</item>
+        <item>@array/ro</item>
+        <item>@array/ru</item>
+        <item>@array/sr</item>
+        <item>@array/sk</item>
+        <item>@array/sl</item>
+        <item>@array/so</item>
+        <item>@array/es</item>
+        <item>@array/es_mx</item>
+        <item>@array/sw</item>
+        <item>@array/sv</item>
+        <item>@array/tl</item>
+        <item>@array/ta</item>
+        <item>@array/th</item>
+        <item>@array/tr</item>
+        <item>@array/uk</item>
+        <item>@array/ur</item>
+    </array>
+</resources>

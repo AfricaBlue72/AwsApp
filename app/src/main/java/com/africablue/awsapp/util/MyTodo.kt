@@ -10,6 +10,7 @@ class MyTodo {
         TODO("https://adrianhall.github.io/android/2018/09/18/auth-with-aws-amplify-1/")
         TODO("User Kotlin Singleton object patter instead of the java version")
         TODO("Take UserCodeDeliveryDetails into account during signup")
+        TODO( "Implement com.amazonaws.AmazonServiceException in providers (translate) when no access has been allowed")
     }
 }
 

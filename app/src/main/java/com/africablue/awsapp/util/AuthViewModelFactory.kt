@@ -1,12 +1,9 @@
-package com.africablue.awsapp
+package com.africablue.awsapp.util
 
 import android.content.Context
-import android.os.Bundle
-import androidx.lifecycle.AbstractSavedStateViewModelFactory
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.savedstate.SavedStateRegistryOwner
+import com.africablue.awsapp.MainActivityViewModel
 import com.africablue.awsapp.authproviders.BaseAuthProvider
 import com.africablue.awsapp.ui.auth.*
 
@@ -14,7 +11,7 @@ import com.africablue.awsapp.ui.auth.*
  * Factory for all ViewModels.
  */
 @Suppress("UNCHECKED_CAST")
-class ViewModelFactory constructor(
+class AuthViewModelFactory constructor(
     private val context: Context,
     private val baseAuthProvider: BaseAuthProvider
     ): ViewModelProvider.NewInstanceFactory(){

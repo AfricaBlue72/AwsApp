@@ -34,4 +34,6 @@ interface  BaseAuthProvider {
     fun changePassword(oldPassword: String, newPassword: String): AuthResult
 
     fun refresh()
+
+    fun getCredentials(): Any
 }

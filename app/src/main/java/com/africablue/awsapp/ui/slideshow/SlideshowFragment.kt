@@ -1,9 +1,12 @@
 package com.africablue.awsapp.ui.slideshow
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -26,6 +29,20 @@ class SlideshowFragment : Fragment() {
         slideshowViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
         })
+
+        val buttonLaunchExample = root.findViewById<Button>(R.id.buttonLaunchExample)
+        buttonLaunchExample.setOnClickListener {
+            val webpage: Uri = Uri.parse("https://www.hollandcasino.nl/")
+            val intent = Intent(Intent.ACTION_VIEW, webpage)
+
+            if (intent.resolveActivity(activity?.packageManager!!) != null) {
+                startActivity(intent)
+            }
+        }
+
+
+
+
         return root
     }
 }

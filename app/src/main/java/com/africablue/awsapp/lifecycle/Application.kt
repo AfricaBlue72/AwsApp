@@ -5,6 +5,7 @@ import com.africablue.awsapp.authproviders.AwsAuthProvider
 import com.africablue.awsapp.authproviders.BaseAuthProvider
 import com.amazonaws.mobile.config.AWSConfiguration
 import com.africablue.awsapp.authproviders.ProviderInjector
+import com.africablue.awsapp.translateprovider.AwsTranslateProvider
 import com.africablue.awsapp.util.APP_TAG
 
 
