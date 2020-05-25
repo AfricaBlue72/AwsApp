@@ -3,6 +3,10 @@
     <string name="translate_chat_fragment">Translate</string>
     <string name="translate_message_input_end_icon">Send</string>
     <string name="translate_message_input_start_icon">Configure</string>
+    <string name="translate_source_language">Source language</string>
+    <string name="translate_target_language">Target language</string>
+    <string name="translate_button_ok">OK</string>
+    <string name="translate_button_cancel">Cancel</string>
 
     <string name="translate_language_Afrikaans">Afrikaans</string>
     <string name="translate_language_Albanian">Albanian</string>
