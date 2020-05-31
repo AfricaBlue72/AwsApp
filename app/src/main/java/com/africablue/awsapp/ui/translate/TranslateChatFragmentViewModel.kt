@@ -1,24 +1,25 @@
 package com.africablue.awsapp.ui.translate
 
-
 import android.content.Context
 import android.content.res.TypedArray
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.africablue.awsapp.R
 import com.africablue.awsapp.translateprovider.AwsTranslateProvider
 import com.africablue.awsapp.util.APP_TAG
 import com.amazonaws.auth.AWSCredentials
+import com.amazonaws.auth.AWSCredentialsProvider
+import com.amazonaws.services.polly.model.Voice
 import com.amazonaws.services.translate.model.TranslateTextResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-
 class TranslateChatFragmentViewModel(private val context: Context,
-                                     private val awsCredentials: AWSCredentials,
+                                     private val awsCredentialsProvider: AWSCredentialsProvider,
                                      public val translateProvider: AwsTranslateProvider): ViewModel(){
 
 
@@ -27,31 +28,54 @@ class TranslateChatFragmentViewModel(private val context: Context,
     var isTranslating = MutableLiveData<Boolean>().apply{
         value = false
     }
+
     val languageCodeMap = this.loadLanguageMap()
-    var sourceLanguageCode = MutableLiveData<String>().apply{
-        value = "en"
+
+    var voicesMap = HashMap<String, MutableList<Voice>>()
+
+    var sourceLanguage = MutableLiveData<String>().apply{
+        value = "English"
     }
-    var targetLanguageCode = MutableLiveData<String>().apply{
-        value = "nl"
+    var targetLanguage = MutableLiveData<String>().apply{
+        value = "Dutch"
     }
+
 
     init{
-        val countries: TypedArray = context.resources.obtainTypedArray(R.array.countries_array_of_arrays)
-        AwsTranslateProvider.initialize(awsCredentials)
+        //val countries: TypedArray = context.resources.obtainTypedArray(R.array.countries_array_of_arrays)
+        translateProvider.voices.observeForever {
+            it.forEach()
+            {
+                if(voicesMap[it.languageCode] != null){
+                    voicesMap[it.languageCode]?.add(it)
+                }
+                else {
+                    voicesMap.put(it.languageCode, mutableListOf(it))
+                }
+            }
+        }
+        AwsTranslateProvider.initialize(awsCredentialsProvider)
     }
 
-    fun translate(sourceLanguage: String?, targetLanguage: String?, text: String){
+    fun translate(text: String){
+        Log.i(mLogTag, "Size of voice map: " + voicesMap.size)
+        Log.i(mLogTag, "Size of voices: " + translateProvider.voices.value?.size)
         isTranslating.value = true
+        val sourceCode = this.languageCodeMap?.get(this.sourceLanguage.value)
+        val targetCode = this.languageCodeMap?.get(this.targetLanguage.value)
 
+
+        //Add the source message to the channel
         val message = TranslateChatMessage(
             TranslateChatMessageType.SEND,
-            sourceLanguage?: "auto",
+            sourceCode?: "auto",
             text)
         TranslateChatData.chatList.add(message)
         translateDataAdapter.notifyItemInserted( (TranslateChatData.chatList.size - 1) )
 
+        //Translate
         viewModelScope.launch {
-            _translate(sourceLanguage?: "en", targetLanguage?: "fr" , text)
+            _translate(sourceCode?: "en", targetCode?: "nl" , text)
         }
     }
 
@@ -70,6 +94,7 @@ class TranslateChatFragmentViewModel(private val context: Context,
             isTranslating.postValue(false)
         }
     }
+
 
     fun loadLanguageMap(): HashMap<String, String>? {
         val languageMap = context.resources.obtainTypedArray(R.array.countries_array_of_arrays)

@@ -5,6 +5,7 @@ import com.africablue.awsapp.authproviders.AwsAuthProvider
 import com.africablue.awsapp.lifecycle.Application
 import com.africablue.awsapp.translateprovider.AwsTranslateProvider
 import com.amazonaws.auth.AWSCredentials
+import com.amazonaws.auth.AWSCredentialsProvider
 
 fun Fragment.getViewModelFactoryForAuthRepo(): AuthViewModelFactory {
     //val authProvider =  ProviderInjector.getAwsAuthProvider()
@@ -17,12 +18,12 @@ fun Fragment.getViewModelFactoryForAuthRepo(): AuthViewModelFactory {
 
 fun Fragment.getViewModelFactoryForTranslateChat(): TranslateViewModelFactory {
     val authProvider = (requireContext().applicationContext as Application).authProvider
-    val credentials = authProvider.getCredentials()
+    val credentialsProvider = authProvider.getCredentialsProvider()
 
-    if(credentials is AWSCredentials){
+    if(credentialsProvider is AWSCredentialsProvider){
         return TranslateViewModelFactory(
             this.requireContext(),
-            credentials as AWSCredentials,
+            credentialsProvider as AWSCredentialsProvider,
             AwsTranslateProvider
         )}
     else{

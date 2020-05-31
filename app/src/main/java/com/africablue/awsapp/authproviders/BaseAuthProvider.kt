@@ -36,4 +36,6 @@ interface  BaseAuthProvider {
     fun refresh()
 
     fun getCredentials(): Any
+
+    fun getCredentialsProvider(): Any
 }

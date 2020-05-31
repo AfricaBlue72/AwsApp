@@ -10,11 +10,16 @@ import android.widget.AutoCompleteTextView
 import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.viewModels
 import com.africablue.awsapp.R
+import com.africablue.awsapp.util.getViewModelFactoryForTranslateChat
 import com.google.android.material.textfield.TextInputLayout
 
 
-class TranslateLanguageDialog(private val listener: LanguageDialogListener, private val languages: List<String>)  : DialogFragment() {
+class TranslateLanguageDialog(private val listener: LanguageDialogListener)  : DialogFragment() {
+    private val viewModel: TranslateChatFragmentViewModel by viewModels{
+        getViewModelFactoryForTranslateChat()
+    }
 
     interface LanguageDialogListener {
         fun onDialogPositiveClick(sourceLanguage: String?, targetLanguage: String?)
@@ -44,13 +49,20 @@ class TranslateLanguageDialog(private val listener: LanguageDialogListener, priv
                 dismiss()
             }
 
-            val sourceLanguage = view.findViewById<TextInputLayout>(R.id.textFieldSourceLanguage)
-            val sourceAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, languages)
-            (sourceLanguage.editText as? AutoCompleteTextView)?.setAdapter(sourceAdapter)
+            val map = viewModel.languageCodeMap
+            if(map != null) {
+                val list = ArrayList(map.keys).sorted()
 
-            val targetLanguage = view.findViewById<TextInputLayout>(R.id.textFieldTargetLanguage)
-            val targetAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, languages)
-            (targetLanguage.editText as? AutoCompleteTextView)?.setAdapter(targetAdapter)
+                val sourceLanguage = view.findViewById<TextInputLayout>(R.id.textFieldSourceLanguage)
+                val sourceAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, list)
+                (sourceLanguage.editText as? AutoCompleteTextView)?.setAdapter(sourceAdapter)
+
+
+
+                val targetLanguage = view.findViewById<TextInputLayout>(R.id.textFieldTargetLanguage)
+                val targetAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, list)
+                (targetLanguage.editText as? AutoCompleteTextView)?.setAdapter(targetAdapter)
+            }
 
             builder.setView(view)
             val dialog = builder.create()

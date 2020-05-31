@@ -72,6 +72,7 @@ dependencies {
         transitive = true
     }
     implementation("com.amazonaws:aws-android-sdk-translate:$aws_sdk_version")
+    implementation("com.amazonaws:aws-android-sdk-polly:$aws_sdk_version")
 //    implementation("com.amazonaws:aws-android-sdk-auth-userpools:$aws_sdk_version@aar") {
 //        transitive = true
 //    }

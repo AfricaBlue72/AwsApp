@@ -1,7 +1,6 @@
 package com.africablue.awsapp.ui.translate
 
 import android.os.Bundle
-import android.view.ContextMenu
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,8 +21,6 @@ class TranslateChatFragment : Fragment(), TranslateLanguageDialog.LanguageDialog
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
-//    private var sourceLanguageCode = "en"
-//    private var targetLanguageCode = "nl"
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,17 +54,17 @@ class TranslateChatFragment : Fragment(), TranslateLanguageDialog.LanguageDialog
         })
         val input = root.findViewById<TextInputLayout>(R.id.textViewInput)
 
-        viewModel.sourceLanguageCode.observe(viewLifecycleOwner, Observer{
-            input.hint = "Translate: " + viewModel.sourceLanguageCode.value + " -> " + viewModel.targetLanguageCode.value
+        viewModel.sourceLanguage.observe(viewLifecycleOwner, Observer{
+            input.hint = viewModel.sourceLanguage.value + " -> " + viewModel.targetLanguage.value
         })
 
-        viewModel.targetLanguageCode.observe(viewLifecycleOwner, Observer{
-            input.hint = "Translate: " + viewModel.sourceLanguageCode.value + " -> " + viewModel.targetLanguageCode.value
+        viewModel.targetLanguage.observe(viewLifecycleOwner, Observer{
+            input.hint = viewModel.sourceLanguage.value + " -> " + viewModel.targetLanguage.value
         })
 
         input.setEndIconOnClickListener{
             val text = input.editText?.text.toString()
-            viewModel.translate(viewModel.sourceLanguageCode.value, viewModel.targetLanguageCode.value, text)
+            viewModel.translate(text)
             input.editText?.text?.clear()
         }
 
@@ -75,8 +72,7 @@ class TranslateChatFragment : Fragment(), TranslateLanguageDialog.LanguageDialog
         configure.setStartIconOnClickListener{
             val map = viewModel.languageCodeMap
             if(map != null) {
-                val list = ArrayList(map.keys).sorted()
-                val dialog = TranslateLanguageDialog(this@TranslateChatFragment, list)
+                val dialog = TranslateLanguageDialog(this@TranslateChatFragment)
                 dialog.show(childFragmentManager, null)
             }
         }
@@ -84,18 +80,11 @@ class TranslateChatFragment : Fragment(), TranslateLanguageDialog.LanguageDialog
     }
 
     override fun onDialogPositiveClick(sourceLanguage: String?, targetLanguage: String?) {
-
         if (sourceLanguage != null) {
-            val sourceCode = viewModel.languageCodeMap?.get(sourceLanguage)
-            if(sourceCode != null) {
-                viewModel.sourceLanguageCode.value = sourceCode
-            }
+                viewModel.sourceLanguage.value = sourceLanguage
         }
         if (targetLanguage != null) {
-            val targetCode = viewModel.languageCodeMap?.get(targetLanguage)
-            if(targetCode != null) {
-                viewModel.targetLanguageCode.value = targetCode
-            }
+            viewModel.targetLanguage.value = targetLanguage
         }
     }
 

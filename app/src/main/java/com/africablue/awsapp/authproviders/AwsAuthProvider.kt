@@ -349,4 +349,8 @@ object AwsAuthProvider : BaseAuthProvider {
     override fun getCredentials(): Any {
         return AWSMobileClient.getInstance().credentials
     }
+
+    override fun getCredentialsProvider(): Any {
+        return AWSMobileClient.getInstance()
+    }
 }
