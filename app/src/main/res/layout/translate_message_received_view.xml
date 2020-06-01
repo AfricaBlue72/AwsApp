@@ -69,14 +69,16 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.90" />
 
-    <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+
+    <ImageButton
+        android:id="@+id/imageButtonPlayRecText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/translate_color_chat_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.1"
-        app:srcCompat="@drawable/ic_volume_down_black_24dp" />
+        app:layout_constraintVertical_bias="0.2"
+        app:srcCompat="@drawable/ic_volume_down_grey_24dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

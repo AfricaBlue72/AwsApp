@@ -7,6 +7,7 @@ enum class TranslateChatMessageType(value: Int){
 
 data class TranslateChatMessage(val messageType: TranslateChatMessageType,
                                 val languageCode: String?,
+                                val voice: String?,
                                 val text: String?) {
 }
 

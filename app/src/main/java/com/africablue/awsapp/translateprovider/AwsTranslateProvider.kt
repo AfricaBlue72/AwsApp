@@ -2,14 +2,11 @@ package com.africablue.awsapp.translateprovider
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.africablue.awsapp.authproviders.AwsAuthProvider
 import com.africablue.awsapp.util.APP_TAG
-import com.amazonaws.auth.AWSCredentials
+import com.africablue.awsapp.util.DEFAULT_URL
 import com.amazonaws.auth.AWSCredentialsProvider
-import com.amazonaws.mobile.client.AWSMobileClient
 import com.amazonaws.services.polly.AmazonPollyPresigningClient
-import com.amazonaws.services.polly.model.DescribeVoicesRequest
-import com.amazonaws.services.polly.model.Voice
+import com.amazonaws.services.polly.model.*
 import com.amazonaws.services.translate.AmazonTranslateClient
 import com.amazonaws.services.translate.model.TranslateTextRequest
 import com.amazonaws.services.translate.model.TranslateTextResult
@@ -17,13 +14,18 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.net.URL
+
 
 object AwsTranslateProvider {
     val mLogTag = APP_TAG + this::class.java.simpleName
     lateinit var translateClient: AmazonTranslateClient
     lateinit var pollyClient: AmazonPollyPresigningClient
-    val voices = MutableLiveData<MutableList<Voice>>().apply {
-        value = mutableListOf<Voice>()
+    private val _voices = mutableListOf<Voice>()
+
+    val voices  = MutableLiveData<MutableList<Voice>>().apply {
+        //value = mutableListOf<Voice>()
+        value = _voices
     }
     //val voices = mutableListOf<Voice>()
 
@@ -53,41 +55,64 @@ object AwsTranslateProvider {
         return result
     }
 
+    fun getPresignedSynthesizeSpeechUrl(text: String, voice: String, engine: String?): URL
+    {
+        var presignedSynthesizeSpeechUrl: URL = URL(DEFAULT_URL)
+        try {
+            // Create speech synthesis request.
+            val synthesizeSpeechPresignRequest: SynthesizeSpeechPresignRequest =
+                SynthesizeSpeechPresignRequest()
+                    .withText(text)
+                    .withVoiceId(voice)
+                    .withOutputFormat(OutputFormat.Mp3)
+
+            if(engine != null && engine?.equals("neural"))
+                synthesizeSpeechPresignRequest.withEngine(Engine.Neural)
+
+            // Get the presigned URL for synthesized speech audio stream.
+            presignedSynthesizeSpeechUrl =
+                pollyClient.getPresignedSynthesizeSpeechUrl(synthesizeSpeechPresignRequest)
+        }
+        catch(e: Exception){
+            Log.w(mLogTag, "Get voices error: " + e.message)
+        }
+        return presignedSynthesizeSpeechUrl
+    }
+
     suspend fun getVoices(){
-        withContext(Dispatchers.IO){
-            getVoicesRecursive(null)
+        //Only load once
+        if(_voices.isEmpty()) {
+            withContext(Dispatchers.IO) {
+                _voices.addAll(getVoicesRecursive(null))
+                voices.postValue(_voices)
+            }
         }
     }
 
-    private suspend fun getVoicesRecursive(token: String?) {
+    private suspend fun getVoicesRecursive(token: String?): MutableList<Voice> {
         var request = DescribeVoicesRequest()
+        var result = mutableListOf<Voice>()
 
         if(token != null){
             request = request.withNextToken(token)
         }
         try {
-            val result = pollyClient.describeVoices(request)
+            val describeVoicesResult = pollyClient.describeVoices(request)
 
-            if(result != null) {
-                val list = mutableListOf<Voice>()
-                if(voices.value != null){
-                    list.addAll(voices.value!!)
-                }
-                list.addAll(result.voices)
-                voices.postValue(list)
+            if(describeVoicesResult != null) {
+                result.addAll(describeVoicesResult.voices)
 
-                Log.i(mLogTag, "Added " + voices.value?.size + " voices.")
+                Log.i(mLogTag, "Added " + result.size + " voices.")
 
-                val nextToken = result.nextToken
+                val nextToken = describeVoicesResult.nextToken
                 if(nextToken != null){
-                    getVoicesRecursive(nextToken)
+                    result.addAll( getVoicesRecursive(nextToken) )
                 }
             }
         }
         catch(e: Exception){
             Log.w(mLogTag, "Get voices error: " + e.message)
         }
-
-        return
+        return result
     }
 }

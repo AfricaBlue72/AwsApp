@@ -4,7 +4,9 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.africablue.awsapp.R
 import java.text.DateFormat
@@ -13,6 +15,7 @@ import java.util.*
 
 
 class TranslateDataAdapter(
+    private val viewModel: TranslateChatFragmentViewModel,
     private val context: Context
 ) : RecyclerView.Adapter<TranslateDataAdapter.BaseTranslateViewHolder<*>>() {
 
@@ -26,7 +29,7 @@ class TranslateDataAdapter(
         return when (messageType) {
             TranslateChatMessageType.RECEIVE-> TYPE_RECEIVE
             TranslateChatMessageType.SEND -> TYPE_SEND
-            else -> throw IllegalArgumentException("Invalid type of data " + position)
+            else -> throw IllegalArgumentException("Invalid type of data $position")
         }
     }
 
@@ -67,6 +70,7 @@ class TranslateDataAdapter(
             val header = itemView.findViewById<TextView>(R.id.textViewReceiveMessageHeader)
             val mainText = itemView.findViewById<TextView>(R.id.textViewReceiveMessageMain)
             val footer = itemView.findViewById<TextView>(R.id.textViewReceiveMessageFooter)
+            val play = itemView.findViewById<ImageButton>(R.id.imageButtonPlayRecText)
 
             header.text = item?.languageCode
             mainText.text = item?.text
@@ -74,14 +78,25 @@ class TranslateDataAdapter(
                 DateFormat.getDateTimeInstance().format(Date())
 
             footer.text = date.toString()
+
+            if(item.text != null && item.voice != null) {
+                play.setOnClickListener {
+                    viewModel.getPresignedSynthesizeSpeechUrl(item.text, item.voice)
+                }
+            }
+            else{
+                play.isEnabled = false
+                play.isVisible = false
+            }
         }
     }
-    class SendMessageViewHolder(itemView: View) : BaseTranslateViewHolder<TranslateChatMessage>(itemView) {
+    inner class SendMessageViewHolder(itemView: View) : BaseTranslateViewHolder<TranslateChatMessage>(itemView) {
 
         override fun bind(item: TranslateChatMessage) {
             val header = itemView.findViewById<TextView>(R.id.textViewSentMessageHeader)
             val mainText = itemView.findViewById<TextView>(R.id.textViewSentMessageMain)
             val footer = itemView.findViewById<TextView>(R.id.textViewSentMessageFooter)
+            val play = itemView.findViewById<ImageButton>(R.id.imageButtonPlaySentText)
 
             header.text = item?.languageCode
             mainText.text = item?.text
@@ -89,6 +104,16 @@ class TranslateDataAdapter(
                 DateFormat.getDateTimeInstance().format(Date())
 
             footer.text = date.toString()
+
+            if(item.text != null && item.voice != null) {
+                play.setOnClickListener {
+                    viewModel.getPresignedSynthesizeSpeechUrl(item.text, item.voice)
+                }
+            }
+            else{
+                play.isEnabled = false
+                play.isVisible = false
+            }
         }
     }
 

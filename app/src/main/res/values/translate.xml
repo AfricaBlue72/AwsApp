@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="translate_color_chat_background">#F5F5DC</color>
+    <color name="translate_color_play_back">#FF999999</color>
+
     <string name="translate_chat_fragment">Translate</string>
     <string name="translate_message_input_end_icon">Send</string>
     <string name="translate_message_input_start_icon">Configure</string>
     <string name="translate_source_language">Source language</string>
     <string name="translate_target_language">Target language</string>
+    <string name="translate_source_voice">Source voice</string>
+    <string name="translate_target_voice">Target voice</string>
+    <string name="translate_target_auto_voice">Automatic voice response</string>
+
+
     <string name="translate_button_ok">OK</string>
     <string name="translate_button_cancel">Cancel</string>
 
