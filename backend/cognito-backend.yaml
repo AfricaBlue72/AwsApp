@@ -328,6 +328,9 @@ Resources:
                 -   Effect: Allow
                     Action:
                       -   mobileanalytics:PutEvents
+                      -   translate:TranslateText
+                      -   polly:DescribeVoices
+                      -   polly:SynthesizeSpeech
                     Resource: '*'
 
   IdentityPoolRoleAttachment:
