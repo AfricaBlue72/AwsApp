@@ -76,6 +76,12 @@ class TranslateChatFragment : Fragment(), TranslateLanguageDialog.LanguageDialog
             }
         })
 
+        viewModel.copiedText.observe(viewLifecycleOwner, Observer{
+            if(it != null && it.isNotEmpty()){
+                input.editText?.setText(it)
+            }
+        })
+
         input.setEndIconOnClickListener{
             val text = input.editText?.text.toString()
             viewModel.translate(text, viewModel.sourceVoice.value, viewModel.targetVoice.value)

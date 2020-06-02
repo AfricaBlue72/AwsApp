@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.africablue.awsapp.R
@@ -22,6 +23,10 @@ class TranslateDataAdapter(
     companion object {
         const val TYPE_RECEIVE = 0
         const val TYPE_SEND = 1
+    }
+
+    interface MessageListener {
+        fun onMessageClick(messageText: String?)
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -97,6 +102,7 @@ class TranslateDataAdapter(
             val mainText = itemView.findViewById<TextView>(R.id.textViewSentMessageMain)
             val footer = itemView.findViewById<TextView>(R.id.textViewSentMessageFooter)
             val play = itemView.findViewById<ImageButton>(R.id.imageButtonPlaySentText)
+            val message = itemView.findViewById<ConstraintLayout>(R.id.constraintLayoutSentDetail)
 
             header.text = item?.languageCode
             mainText.text = item?.text
@@ -113,6 +119,10 @@ class TranslateDataAdapter(
             else{
                 play.isEnabled = false
                 play.isVisible = false
+            }
+
+            message.setOnClickListener{
+                viewModel.onMessageClick(item?.text)
             }
         }
     }

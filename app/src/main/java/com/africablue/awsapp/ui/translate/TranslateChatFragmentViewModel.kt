@@ -19,7 +19,7 @@ import java.net.URL
 
 class TranslateChatFragmentViewModel(private val context: Context,
                                      private val awsCredentialsProvider: AWSCredentialsProvider,
-                                     public val translateProvider: AwsTranslateProvider): ViewModel(){
+                                     public val translateProvider: AwsTranslateProvider): ViewModel(), TranslateDataAdapter.MessageListener{
 
 
     val mLogTag = APP_TAG + this::class.java.simpleName
@@ -40,13 +40,16 @@ class TranslateChatFragmentViewModel(private val context: Context,
         value = "Dutch"
     }
     var sourceVoice = MutableLiveData<String>().apply{
-        value = ""
+        value = "Salli | neural"
     }
     var targetVoice = MutableLiveData<String>().apply{
-        value = ""
+        value = "Lotte | standard"
     }
     var playBackUrl = MutableLiveData<URL>().apply{
         value = URL(DEFAULT_URL)
+    }
+    var copiedText = MutableLiveData<String>().apply{
+        value = ""
     }
 
     //fun initialize(){
@@ -159,6 +162,10 @@ class TranslateChatFragmentViewModel(private val context: Context,
                 voicesMap.put(code, mutableListOf(it))
             }
         }
+    }
+
+    override fun onMessageClick(messageText: String?) {
+        copiedText.postValue(messageText)
     }
 
     //Map AWS Polly language codes to AWS Translate language codes
